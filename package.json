@@ -96,6 +96,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "CI= react-scripts build",
+    "preinstall": "npm i --save @evofinance9/uikit @evofinance9/sdk --legacy-peer-deps",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
