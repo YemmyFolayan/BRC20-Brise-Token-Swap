@@ -1,0 +1,38 @@
+{
+  "name": "PancakeSwap Default List",
+  "timestamp": "2021-03-17T09:56:23Z",
+  "version": {
+    "major": 2,
+    "minor": 10,
+    "patch": 0
+  },
+  "tags": {},
+  "logoURI": "https://exchange.pancakeswap.finance/images/pancakeswap.png",
+  "keywords": ["pancake", "default"],
+  "tokens": [
+    {
+      "name": "WBRISE Token",
+      "symbol": "WBRISE",
+      "address": "0x0eb9036cbE0f052386f36170c6b07eF0a0E3f710",
+      "chainId": 32520,
+      "decimals": 18,
+      "logoURI": "https://evo-server.in/images/0x8fff93e810a2edaafc326edee51071da9d398e83.png"
+    },
+    {
+      "name": "Evo Token",
+      "symbol": "EVO",
+      "address": "0x267Ae4bA9CE5ef3c87629812596b0D89EcBD81dD",
+      "chainId": 32520,
+      "decimals": 18,
+      "logoURI": "https://evo-server.in/images/0x267ae4ba9ce5ef3c87629812596b0d89ecbd81dd.png"
+    },
+    {
+      "name": "OMNIA Token",
+      "symbol": "OMNIA",
+      "address": "0x5d4685c2C75581C67b9D6292A065a767bC214681",
+      "chainId": 32520,
+      "decimals": 8,
+      "logoURI": "https://evo-server.in/images/0x5d4685c2C75581C67b9D6292A065a767bC214681.png"
+    }
+  ]
+}
