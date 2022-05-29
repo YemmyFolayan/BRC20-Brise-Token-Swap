@@ -2,6 +2,7 @@
   "name": "bitgert-swap-interface",
   "description": "Bitgert Swap Interface",
   "homepage": ".",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
