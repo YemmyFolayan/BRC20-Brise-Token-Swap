@@ -1,6 +1,6 @@
 import React, { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
-import { ResetCSS } from '@nguyenphu27/uikit'
+import { ResetCSS } from "@evofinance9/uikit"
 import GlobalStyle from './style/Global'
 import App from './pages/App'
 import ApplicationUpdater from './state/application/updater'

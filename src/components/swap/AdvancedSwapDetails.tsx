@@ -1,6 +1,6 @@
 import React from 'react'
-import { Trade, TradeType } from '@nguyenphu27/sdk'
-import { Card, CardBody, Text } from '@nguyenphu27/uikit'
+import { Trade, TradeType } from '@evofinance9/sdk'
+import { Card, CardBody, Text } from '@evofinance9/uikit'
 import useI18n from 'hooks/useI18n'
 import { Field } from '../../state/swap/actions'
 import { useUserSlippageTolerance } from '../../state/user/hooks'

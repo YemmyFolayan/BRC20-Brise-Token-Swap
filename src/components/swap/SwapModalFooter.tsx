@@ -1,6 +1,6 @@
-import { Trade, TradeType } from '@nguyenphu27/sdk'
+import { Trade, TradeType } from '@evofinance9/sdk'
 import React, { useMemo, useState } from 'react'
-import { Text, Button } from '@nguyenphu27/uikit'
+import { Text, Button } from '@evofinance9/uikit'
 import { Repeat } from 'react-feather'
 
 import useI18n from 'hooks/useI18n'

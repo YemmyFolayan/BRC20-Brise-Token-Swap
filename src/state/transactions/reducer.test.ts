@@ -1,4 +1,4 @@
-import { ChainId } from '@nguyenphu27/sdk'
+import { ChainId } from '@evofinance9/sdk'
 import { createStore, Store } from 'redux'
 import { addTransaction, checkedTransaction, clearAllTransactions, finalizeTransaction } from './actions'
 import reducer, { initialState, TransactionState } from './reducer'

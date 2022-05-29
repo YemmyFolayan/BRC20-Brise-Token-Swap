@@ -1,6 +1,6 @@
 import { Web3Provider } from '@ethersproject/providers'
-import { ChainId } from '@nguyenphu27/sdk'
-import { connectorLocalStorageKey } from '@nguyenphu27/uikit'
+import { ChainId } from '@evofinance9/sdk'
+import { connectorLocalStorageKey } from '@evofinance9/uikit'
 import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 // eslint-disable-next-line import/no-unresolved
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types'

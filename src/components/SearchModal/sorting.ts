@@ -1,4 +1,4 @@
-import { Token, TokenAmount } from '@nguyenphu27/sdk'
+import { Token, TokenAmount } from '@evofinance9/sdk'
 import { useMemo } from 'react'
 import { useAllTokenBalances } from '../../state/wallet/hooks'
 

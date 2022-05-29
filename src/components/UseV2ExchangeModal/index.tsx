@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { Modal, Text, Link, Button, Flex, Checkbox, Box } from '@nguyenphu27/uikit'
+import { Modal, Text, Link, Button, Flex, Checkbox, Box } from '@evofinance9/uikit'
 
 const defaultOnDismiss = () => null
 

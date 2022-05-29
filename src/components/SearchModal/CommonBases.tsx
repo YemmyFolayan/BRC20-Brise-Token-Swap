@@ -1,6 +1,6 @@
 import React from 'react'
-import { Text } from '@nguyenphu27/uikit'
-import { ChainId, Currency, currencyEquals, ETHER, Token } from '@nguyenphu27/sdk'
+import { Text } from '@evofinance9/uikit'
+import { ChainId, Currency, currencyEquals, ETHER, Token } from '@evofinance9/sdk'
 import styled from 'styled-components'
 
 import useI18n from 'hooks/useI18n'

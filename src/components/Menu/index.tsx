@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Menu as UikitMenu } from '@nguyenphu27/uikit'
+import { Menu as UikitMenu } from '@evofinance9/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { allLanguages } from 'constants/localisation/languageCodes'
 import { LanguageContext } from 'hooks/LanguageContext'

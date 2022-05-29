@@ -12,7 +12,7 @@ import {
   ArrowDownIcon,
   ErrorIcon,
   OpenNewIcon,
-} from '@nguyenphu27/uikit'
+} from '@evofinance9/uikit'
 
 const otherProjects = [
   {

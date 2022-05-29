@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import { Heading, IconButton, Text, Flex, useModal, TuneIcon, HistoryIcon } from '@nguyenphu27/uikit'
+import { Heading, IconButton, Text, Flex, useModal, TuneIcon, HistoryIcon } from '@evofinance9/uikit'
 import useI18n from 'hooks/useI18n'
 import SettingsModal from './SettingsModal'
 import RecentTransactionsModal from './RecentTransactionsModal'

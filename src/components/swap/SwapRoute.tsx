@@ -1,7 +1,7 @@
-import { Trade } from '@nguyenphu27/sdk'
+import { Trade } from '@evofinance9/sdk'
 import React, { Fragment, memo, useContext } from 'react'
 import { ChevronRight } from 'react-feather'
-import { Flex, Text } from '@nguyenphu27/uikit'
+import { Flex, Text } from '@evofinance9/uikit'
 import { ThemeContext } from 'styled-components'
 import CurrencyLogo from '../CurrencyLogo'
 

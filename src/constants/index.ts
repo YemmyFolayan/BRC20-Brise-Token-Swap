@@ -1,4 +1,4 @@
-import { ChainId, JSBI, Percent, Token, WETH } from '@nguyenphu27/sdk'
+import { ChainId, JSBI, Percent, Token, WETH } from '@evofinance9/sdk'
 import { abi as ROUTER_ABI } from "./abis/router.json";
 
 export const ROUTER_ADDRESS = '0x943b01Dce88955525a956bD6758BD72b6FE4c927'

@@ -1,6 +1,6 @@
-import { Token } from '@nguyenphu27/sdk'
+import { Token } from '@evofinance9/sdk'
 import { transparentize } from 'polished'
-import { Button, Text } from '@nguyenphu27/uikit'
+import { Button, Text } from '@evofinance9/uikit'
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AlertTriangle } from 'react-feather'

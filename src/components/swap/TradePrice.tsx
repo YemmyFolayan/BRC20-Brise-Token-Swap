@@ -1,6 +1,6 @@
 import React from 'react'
-import { Price } from '@nguyenphu27/sdk'
-import { SyncAltIcon, Text } from '@nguyenphu27/uikit'
+import { Price } from '@evofinance9/sdk'
+import { SyncAltIcon, Text } from '@evofinance9/uikit'
 import { StyledBalanceMaxMini } from './styleds'
 
 interface TradePriceProps {

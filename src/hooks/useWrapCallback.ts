@@ -1,4 +1,4 @@
-import { Currency, currencyEquals, ETHER, WETH } from '@nguyenphu27/sdk'
+import { Currency, currencyEquals, ETHER, WETH } from '@evofinance9/sdk'
 import { useMemo } from 'react'
 import { tryParseAmount } from '../state/swap/hooks'
 import { useTransactionAdder } from '../state/transactions/hooks'
@@ -44,13 +44,13 @@ export default function useWrapCallback(
             ? async () => {
                 try {
                   const txReceipt = await wethContract.deposit({ value: `0x${inputAmount.raw.toString(16)}` })
-                  addTransaction(txReceipt, { summary: `Wrap ${inputAmount.toSignificant(6)} BNB to WBNB` })
+                  addTransaction(txReceipt, { summary: `Wrap ${inputAmount.toSignificant(6)} BRISE to WBRISE` })
                 } catch (error) {
                   console.error('Could not deposit', error)
                 }
               }
             : undefined,
-        inputError: sufficientBalance ? undefined : 'Insufficient BNB balance'
+        inputError: sufficientBalance ? undefined : 'Insufficient BRISE balance'
       }
     } if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
       return {
@@ -60,13 +60,13 @@ export default function useWrapCallback(
             ? async () => {
                 try {
                   const txReceipt = await wethContract.withdraw(`0x${inputAmount.raw.toString(16)}`)
-                  addTransaction(txReceipt, { summary: `Unwrap ${inputAmount.toSignificant(6)} WBNB to BNB` })
+                  addTransaction(txReceipt, { summary: `Unwrap ${inputAmount.toSignificant(6)} WBRISE to BRISE` })
                 } catch (error) {
                   console.error('Could not withdraw', error)
                 }
               }
             : undefined,
-        inputError: sufficientBalance ? undefined : 'Insufficient WBNB balance'
+        inputError: sufficientBalance ? undefined : 'Insufficient WBRISE balance'
       }
     } 
       return NOT_APPLICABLE
