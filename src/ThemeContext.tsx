@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { ThemeProvider as SCThemeProvider } from 'styled-components'
-import { light, dark } from '@evofinance9/uikit'
+import { dark } from '@evofinance9/uikit'
 
 const CACHE_KEY = 'IS_DARK'
 
@@ -14,7 +14,7 @@ const ThemeContext = React.createContext<ThemeContextType>({ isDark: false, togg
 const ThemeContextProvider: React.FC = ({ children }) => {
   const [isDark, setIsDark] = useState(() => {
     const isDarkUserSetting = localStorage.getItem(CACHE_KEY)
-    return isDarkUserSetting ? JSON.parse(isDarkUserSetting) : false
+    return isDarkUserSetting ? JSON.parse(isDarkUserSetting) : true
   })
 
   const toggleTheme = () => {
@@ -26,7 +26,7 @@ const ThemeContextProvider: React.FC = ({ children }) => {
 
   return (
     <ThemeContext.Provider value={{ isDark, toggleTheme }}>
-      <SCThemeProvider theme={isDark ? dark : light}>{children}</SCThemeProvider>
+      <SCThemeProvider theme={dark}>{children}</SCThemeProvider>
     </ThemeContext.Provider>
   )
 }

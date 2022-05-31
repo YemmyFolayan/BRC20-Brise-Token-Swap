@@ -17,7 +17,6 @@ const SettingsModal = ({ onDismiss = defaultOnDismiss, translateString }: Settin
     <Modal title={translateString(1200, 'Settings')} onDismiss={onDismiss}>
       <SlippageToleranceSetting translateString={translateString} />
       <TransactionDeadlineSetting translateString={translateString} />
-      <AudioSetting translateString={translateString} />
     </Modal>
   )
 }
