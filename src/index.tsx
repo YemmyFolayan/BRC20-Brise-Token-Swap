@@ -1,6 +1,8 @@
 import React, { StrictMode } from 'react'
+import { HashRouter, Switch, Route } from 'react-router-dom'
 import ReactDOM from 'react-dom'
-import { ResetCSS } from "@evofinance9/uikit"
+import { ResetCSS } from '@evofinance9/uikit'
+import Home from 'pages/Home'
 import GlobalStyle from './style/Global'
 import App from './pages/App'
 import ApplicationUpdater from './state/application/updater'
@@ -17,23 +19,28 @@ if ('ethereum' in window) {
 }
 
 window.addEventListener('error', () => {
-   localStorage?.removeItem('redux_localstorage_simple_lists')
+  localStorage?.removeItem('redux_localstorage_simple_lists')
 })
 
 ReactDOM.render(
   <StrictMode>
-    <Providers>
-      <>
-        <ListsUpdater />
-        <ApplicationUpdater />
-        <TransactionUpdater />
-        <MulticallUpdater />
-        <ToastListener />
-      </>
-      <ResetCSS />
-      <GlobalStyle />
-      <App />
-    </Providers>
+    <HashRouter>
+      <Switch>
+        <Route exact strict path="/" component={Home} />
+        <Providers>
+          <>
+            <ListsUpdater />
+            <ApplicationUpdater />
+            <TransactionUpdater />
+            <MulticallUpdater />
+            <ToastListener />
+          </>
+          <ResetCSS />
+          <GlobalStyle />
+          <App />
+        </Providers>
+      </Switch>
+    </HashRouter>
   </StrictMode>,
   document.getElementById('root')
 )
