@@ -1,10 +1,9 @@
-const API = `https://api.nomics.com/v1/currencies/ticker?key=dd407177db9f965ba2824dfd7f7840acf4a5949f&interval=1d,30d&convert=INR&platform-currency=BRISE2&per-page=100&page=1`
+const API = `https://api.nomics.com/v1/currencies/ticker?key=9c34b8d924af87a41651ef42956ceba1&interval=1d,30d&convert=INR&platform-currency=BRISE2&per-page=100&page=1`
 
 // get token data
 const getTokens = () => {
-  let headersList = {
+  const headersList = {
     Accept: '*/*',
-    'User-Agent': 'Thunder Client (https://www.thunderclient.com)',
   }
 
   return fetch(`${API}`, {
