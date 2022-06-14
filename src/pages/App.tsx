@@ -10,6 +10,7 @@ import AddLiquidity from './AddLiquidity'
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
 import RemoveLiquidity from './RemoveLiquidity'
+import Reward from './Reward'
 import Swap from './Swap'
 import Migration from './Migration'
 import { RedirectPathToSwapOnly } from './Swap/redirects'
@@ -19,6 +20,7 @@ import { TranslationsContext } from '../hooks/TranslationsContext'
 
 import Menu from '../components/Menu'
 import Home from './Home'
+
 
 const AppWrapper = styled.div`
   display: flex;
@@ -85,6 +87,7 @@ export default function App() {
                         <Route exact strict path="/swap" component={Swap} />
                         <Route exact strict path="/find" component={PoolFinder} />
                         <Route exact strict path="/pool" component={Pool} />
+                        <Route exact strict path="/reward" component={Reward} />
                         <Route exact path="/add" component={AddLiquidity} />
                         <Route exact path="/migrate" component={Migration} />
                         <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />

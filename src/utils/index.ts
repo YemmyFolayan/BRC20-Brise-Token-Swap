@@ -1,9 +1,12 @@
+import { BigNumberish, ethers } from 'ethers'
+import { BigNumber as BN } from 'bignumber.js'
 import { Contract } from '@ethersproject/contracts'
 import { getAddress } from '@ethersproject/address'
 import { AddressZero } from '@ethersproject/constants'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@evofinance9/sdk'
+import { REWARD_ABI, REWARD_ADDRESS } from 'constants/abis/reward'
 import { ROUTER_ABI, ROUTER_ADDRESS } from '../constants'
 import { TokenAddressMap } from '../state/lists/hooks'
 
@@ -91,6 +94,10 @@ export function getRouterContract(_: number, library: Web3Provider, account?: st
   return getContract(ROUTER_ADDRESS, ROUTER_ABI, library, account)
 }
 
+export function getRewardContract(_: number, library: Web3Provider, account?: string): Contract {
+  return getContract(REWARD_ADDRESS, REWARD_ABI, library)
+}
+
 export function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
@@ -98,4 +105,8 @@ export function escapeRegExp(string: string): string {
 export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currency): boolean {
   if (currency === ETHER) return true
   return Boolean(currency instanceof Token && defaultTokens[currency.chainId]?.[currency.address])
+}
+
+export const bnDivideByDecimal = (a: BigNumberish) => {
+  return new BN(a.toString()).dividedBy(new BN(1E18))
 }

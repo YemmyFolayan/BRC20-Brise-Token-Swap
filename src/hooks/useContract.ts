@@ -2,6 +2,7 @@ import { Contract } from '@ethersproject/contracts'
 import { ChainId, WETH } from '@evofinance9/sdk'
 import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import { useMemo } from 'react'
+import { REWARD_ABI, REWARD_ADDRESS } from 'constants/abis/reward'
 import ENS_ABI from '../constants/abis/ens-registrar.json'
 import ENS_PUBLIC_RESOLVER_ABI from '../constants/abis/ens-public-resolver.json'
 import { ERC20_BYTES32_ABI } from '../constants/abis/erc20'
@@ -62,4 +63,8 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 export function useMulticallContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
+}
+
+export function useRewardContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract(REWARD_ADDRESS, REWARD_ABI, withSignerIfPossible)
 }
