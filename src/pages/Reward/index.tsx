@@ -40,7 +40,7 @@ export default function Reward() {
     const args: Array<string | string[] | number> = [idx]
     const value: BigNumber | null = null
 
-    await estimate(...args, value ? { value } : {})
+    await estimate(...args)
       .then((estimatedGasLimit) =>
         method(...args, {
           ...(value ? { value } : {}),
@@ -70,9 +70,13 @@ export default function Reward() {
         <Wrapper>
           <PageHeader title="Reward" description="Swap token to receive reward" />
           <CardBody>
-            {balances?.map((tokenAmount, idx) => (
-              <RewardList key={tokenAmount} idx={idx} tokenAmount={tokenAmount} claimReward={claimReward} />
-            ))}
+            {balances?.map((tokenAmount, idx) =>
+              tokenAmount !== 0 ? (
+                <RewardList key={tokenAmount} idx={idx} tokenAmount={tokenAmount} claimReward={claimReward} />
+              ) : (
+                ''
+              )
+            )}
           </CardBody>
         </Wrapper>
       </AppBody>

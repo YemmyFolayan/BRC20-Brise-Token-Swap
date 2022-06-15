@@ -95,7 +95,7 @@ export function getRouterContract(_: number, library: Web3Provider, account?: st
 }
 
 export function getRewardContract(_: number, library: Web3Provider, account?: string): Contract {
-  return getContract(REWARD_ADDRESS, REWARD_ABI, library)
+  return getContract(REWARD_ADDRESS, REWARD_ABI, library, account)
 }
 
 export function escapeRegExp(string: string): string {
