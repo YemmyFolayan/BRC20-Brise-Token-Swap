@@ -25,6 +25,7 @@ export default function Reward() {
       for (let i = 0; i < res.toNumber(); i++) {
         const res2 = await rewardContract?.callStatic.tokenXAmount(account, i)
         const balance = parseFloat(bnDivideByDecimal(res2[0]).toNumber().toFixed(3))
+        console.log(i, balance)
         setBalances((prev) => (prev ? [...prev, balance] : [balance]))
       }
     }

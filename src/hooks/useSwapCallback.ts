@@ -71,6 +71,7 @@ function useSwapCallArguments(
     )
 
     if (trade.tradeType === TradeType.EXACT_INPUT) {
+      console.log("FEE: true")
       swapMethods.push(
         // @ts-ignore
         Router.swapCallParameters(trade, {
