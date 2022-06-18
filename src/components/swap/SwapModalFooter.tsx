@@ -104,7 +104,7 @@ export default function SwapModalFooter({
             <QuestionHelper
               text={TranslateString(
                 999,
-                'For each trade a 0.2% fee is paid. 0.17% goes to liquidity providers and 0.03% goes to the PancakeSwap treasury.'
+                'For each trade a 0.4% fee is paid. 0.08% goes to liquidity providers and remaining goes to the BitgertSwap treasury.'
               )}
             />
           </RowFixed>

@@ -1,7 +1,7 @@
 import { ChainId, JSBI, Percent, Token, WETH } from '@evofinance9/sdk'
 import { abi as ROUTER_ABI } from "./abis/router.json";
 
-export const ROUTER_ADDRESS = '0x052D6313C6506888BFe22d8019c4F118D9B747FE'
+export const ROUTER_ADDRESS = '0x4a7528Fc1485E0e9Fd43d65B886800193BEEA9AD'
 export { ROUTER_ABI }
 
 // a list of tokens by chain
