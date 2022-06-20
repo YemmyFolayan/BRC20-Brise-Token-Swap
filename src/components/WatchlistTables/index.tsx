@@ -68,7 +68,6 @@ export default function WatchlistTables() {
               <tr key={token.id}>
                 <td style={{ width: '5%' }}>
                   <div className="heading">
-                    <img src={Star} alt="" />
                     <span>{token.name}</span>
                   </div>
                 </td>
@@ -80,9 +79,6 @@ export default function WatchlistTables() {
                     <span className="title">{token.symbol}</span>
                     <span className="dib" />
                   </a>
-                  <button className="btn" type="button">
-                    Buy
-                  </button>
                 </td>
                 <td>${token.price}</td>
                 {/* <td className="text-danger">-1.75%</td> */}
