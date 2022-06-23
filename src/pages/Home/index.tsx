@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../sass/_main.scss'
 import '../../sass/_responsive.scss'
 
+import Footer from '../../components/Footer'
 import WatchlistTables from '../../components/WatchlistTables'
 import { BannerImg } from '../../assets/images'
 
@@ -59,17 +60,12 @@ export default function Home() {
                   }}
                   className="mySwiper"
                 >
-                  <a href="https://bitgert.com/" target="_blank" rel="noreferrer">
-                    <SwiperSlide className="p-2">
-                      <img src={BannerImg} alt="" />
-                    </SwiperSlide>
-                  </a>
                   {generateData().map((item) => (
-                    <a href="https://bitgert.com/" target="_blank" rel="noreferrer" key={item.id}>
-                      <SwiperSlide className="p-2">
-                        <img src={item.url} alt="" />
-                      </SwiperSlide>
-                    </a>
+                    <SwiperSlide className="p-2" key={item.id}>
+                      <a href="https://bitgert.com/" target="_blank" rel="noreferrer">
+                        <img src={BannerImg} alt="" />
+                      </a>
+                    </SwiperSlide>
                   ))}
                 </Swiper>
               </div>
@@ -87,6 +83,7 @@ export default function Home() {
           </Row>
         </Container>
         <WatchlistTables />
+        <Footer />
       </div>
     </>
   )

@@ -1,7 +1,7 @@
 export { default as Logo } from './logo.png';
 export { default as LogoName } from './logo-name.svg';
 export { default as Star } from './star.svg';
-export { default as BannerImg } from './banner.jpg';
+export { default as BannerImg } from './banner.jpeg';
 
 export { default as SearchIcon } from "./search.svg"
 export { default as BitcoinIcon } from "./Bitcoin.svg"

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Table } from 'react-bootstrap'
-import { Star } from '../../assets/images'
 
 import getTokens from './apicalls'
 
@@ -19,8 +18,8 @@ export default function WatchlistTables() {
   }
 
   useEffect(() => {
-		preload()
-		const intervalId = setInterval(() => {
+    preload()
+    const intervalId = setInterval(() => {
       preload()
     }, 20000)
 
@@ -58,36 +57,41 @@ export default function WatchlistTables() {
               <th style={{ width: '5%' }}>#</th>
               <th>Name</th>
               <th>Price</th>
-              <th>Price Change</th>
+              <th>Price Change (1D)</th>
               <th>Volume (24H)</th>
-              <th>Liquidity</th>
             </tr>
           </thead>
           <tbody>
-            {tokens.map((token) => (
-              <tr key={token.id}>
-                <td style={{ width: '5%' }}>
-                  <div className="heading">
-                    <span>{token.name}</span>
-                  </div>
-                </td>
-                <td style={token.id === 1 ? { borderTop: '0' } : {}}>
-                  <a href={getLogoURL(token)} rel="noreferrer">
-                    <span>
-                      <img src={getLogoURL(token)} alt={token.name} />
-                    </span>
-                    <span className="title">{token.symbol}</span>
-                    <span className="dib" />
-                  </a>
-                </td>
-                <td>${token.price}</td>
-                {/* <td className="text-danger">-1.75%</td> */}
-                <td className="filter">-1.75%</td>
-                {/* <td className="filter">-1.75%</td> */}
-                <td>{token['1d']?.volume ? `$${token['1d'].volume}` : '-'}</td>
-                <td className="filter">$557.79B</td>
-              </tr>
-            ))}
+            {tokens.map((token, idx) => {
+              if (token!.id !== 'OMNIA2') {
+                return (
+                  <tr key={token.id}>
+                    <td style={{ width: '5%' }}>
+                      <div className="heading">
+                        <span>{++idx}</span>
+                      </div>
+                    </td>
+                    <td style={token.id === 1 ? { borderTop: '0' } : {}}>
+                      <a href={getLogoURL(token)} rel="noreferrer">
+                        <span>
+                          <img src={getLogoURL(token)} alt={token.name} />
+                        </span>
+                        <span className="title">{token.symbol}</span>
+                        <span className="dib" />
+                      </a>
+                    </td>
+                    <td>${token.price}</td>
+                    {/* <td className="text-danger">-1.75%</td> */}
+                    <td className={token['1d']?.price_change < 0 ? 'text-danger' : 'text-success'}>
+                      {token['1d']?.price_change ? `${token['1d'].price_change}` : '-'}
+                    </td>
+                    {/* <td className="filter">-1.75%</td> */}
+                    <td>{token['1d']?.volume ? `$${token['1d'].volume}` : '-'}</td>
+                  </tr>
+                )
+              }
+              return ''
+            })}
           </tbody>
         </Table>
       </Container>
