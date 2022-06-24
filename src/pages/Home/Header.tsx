@@ -23,14 +23,6 @@ const Header = () => {
 						{/* <Nav.Link href="#action2">Exchange</Nav.Link> */}
 					</Nav>
 					<Form className="d-flex" onSubmit={handleSubmit}>
-						<div className="search_input">
-							<FormControl
-								type="search"
-								placeholder="Search ( / )"
-								aria-label="Search"
-							/>
-							<img src={SearchIcon} alt="" />
-						</div>
 						<Link to="/swap">
 							<button className="btn" type="button">Swap</button>
 						</Link>

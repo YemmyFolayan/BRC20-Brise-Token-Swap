@@ -3,6 +3,7 @@ import { HashRouter, Switch, Route } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 import { ResetCSS } from '@evofinance9/uikit'
 import Home from 'pages/Home'
+import Advertise from 'pages/Advertise'
 import GlobalStyle from './style/Global'
 import App from './pages/App'
 import ApplicationUpdater from './state/application/updater'
@@ -27,6 +28,7 @@ ReactDOM.render(
     <HashRouter>
       <Switch>
         <Route exact strict path="/" component={Home} />
+        <Route exact strict path="/advertise" component={Advertise} />
         <Providers>
           <>
             <ListsUpdater />

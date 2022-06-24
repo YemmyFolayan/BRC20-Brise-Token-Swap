@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Table } from 'react-bootstrap'
+import { Container, Table, FormControl } from 'react-bootstrap'
 
 import getTokens from './apicalls'
 
 export default function WatchlistTables() {
   const [tokens, setTokens] = useState<any>([])
+  const [searchResult, setSearchResult] = useState<any>([])
+
   const [loading, setLoading] = useState(false)
 
   const preload = () => {
@@ -42,15 +44,29 @@ export default function WatchlistTables() {
     }
   }
 
+  const handleSearch = (e) => {
+    console.log(e.target.value)
+
+    const result = tokens.filter(
+      (o) => o.id.includes(e.target.value.toUpperCase()) || o.symbol.includes(e.target.value.toUpperCase())
+    )
+    setSearchResult(result)
+  }
+
   return (
     <div className="table_section">
-      <Container fluid>
-        <h3>
-          <span role="img" aria-label="active" className="emoji">
-            ⚡️
-          </span>{' '}
-          Actively Traded
-        </h3>
+      <Container >
+        <div className="d-flex justify-content-between my-3">
+          <h3>
+            <span role="img" aria-label="active" className="emoji">
+              ⚡️
+            </span>{' '}
+            Actively Traded
+          </h3>
+          <div className="search_input">
+            <FormControl type="search" placeholder="Search ( / )" aria-label="Search" onChange={handleSearch} />
+          </div>
+        </div>
         <Table responsive>
           <thead>
             <tr>
@@ -62,7 +78,39 @@ export default function WatchlistTables() {
             </tr>
           </thead>
           <tbody>
-            {tokens.map((token, idx) => {
+            {searchResult.length === 0 &&
+              tokens.map((token, idx) => {
+                if (token!.id !== 'OMNIA2') {
+                  return (
+                    <tr key={token.id}>
+                      <td style={{ width: '5%' }}>
+                        <div className="heading">
+                          <span>{idx}</span>
+                        </div>
+                      </td>
+                      <td style={token.id === 1 ? { borderTop: '0' } : {}}>
+                        <a href={getLogoURL(token)} rel="noreferrer">
+                          <span>
+                            <img src={getLogoURL(token)} alt={token.name} />
+                          </span>
+                          <span className="title">{token.symbol}</span>
+                          <span className="dib" />
+                        </a>
+                      </td>
+                      <td>${token.price}</td>
+                      {/* <td className="text-danger">-1.75%</td> */}
+                      <td className={token['1d']?.price_change < 0 ? 'text-danger' : 'text-success'}>
+                        {token['1d']?.price_change ? `${token['1d'].price_change}` : '-'}
+                      </td>
+                      {/* <td className="filter">-1.75%</td> */}
+                      <td>{token['1d']?.volume ? `$${token['1d'].volume}` : '-'}</td>
+                    </tr>
+                  )
+                }
+                return ''
+              })}
+
+            {searchResult.map((token, idx) => {
               if (token!.id !== 'OMNIA2') {
                 return (
                   <tr key={token.id}>

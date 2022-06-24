@@ -1,0 +1,7 @@
+.form__container {
+  max-width: 450px;
+  padding: 1.5rem 2rem;
+  background-color: #333;
+  margin: 5rem auto;
+  border-radius: 4px;
+}

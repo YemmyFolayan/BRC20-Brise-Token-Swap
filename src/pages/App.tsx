@@ -19,7 +19,6 @@ import { LanguageContext } from '../hooks/LanguageContext'
 import { TranslationsContext } from '../hooks/TranslationsContext'
 
 import Menu from '../components/Menu'
-import Home from './Home'
 
 
 const AppWrapper = styled.div`

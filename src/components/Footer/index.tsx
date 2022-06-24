@@ -16,14 +16,6 @@ export default function Footer() {
               <div className="col-md-2">
                 <h6 className="text-uppercase font-weight-bold">
                   <a href="#!" className="text-white">
-                    About us
-                  </a>
-                </h6>
-              </div>
-
-              <div className="col-md-2">
-                <h6 className="text-uppercase font-weight-bold">
-                  <a href="#!" className="text-white">
                     Documentation
                   </a>
                 </h6>
@@ -39,7 +31,7 @@ export default function Footer() {
 
               <div className="col-md-2">
                 <h6 className="text-uppercase font-weight-bold">
-                  <a href="#!" className="text-white">
+                  <a href="https://tttttt.me/evofinances" className="text-white">
                     Support
                   </a>
                 </h6>
@@ -47,7 +39,7 @@ export default function Footer() {
 
               <div className="col-md-2">
                 <h6 className="text-uppercase font-weight-bold">
-                  <a href="#!" className="text-white">
+                  <a href="mailto:contact@evofinance.in" className="text-white">
                     Contact
                   </a>
                 </h6>
@@ -71,23 +63,11 @@ export default function Footer() {
           </section>
 
           <section className="text-center mb-5">
-            <a href="https://www.google.com" className="text-white mx-3">
-              <i className="fab fa-facebook-f" />
+          <a href="https://tttttt.me/evofinances" className="text-white mx-3">
+              <i className="fab fa-telegram" />
             </a>
-            <a href="https://www.google.com" className="text-white mx-3">
+            <a href="https://twitter.com/Evo_finances" className="text-white mx-3">
               <i className="fab fa-twitter" />
-            </a>
-            <a href="https://www.google.com" className="text-white mx-3">
-              <i className="fab fa-google" />
-            </a>
-            <a href="https://www.google.com" className="text-white mx-3">
-              <i className="fab fa-instagram" />
-            </a>
-            <a href="https://www.google.com" className="text-white mx-3">
-              <i className="fab fa-linkedin" />
-            </a>
-            <a href="https://www.google.com" className="text-white mx-3">
-              <i className="fab fa-github" />
             </a>
           </section>
         </div>
