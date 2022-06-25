@@ -15,12 +15,10 @@ export default function Footer() {
             <div className="row text-center d-flex justify-content-center pt-5">
               <div className="col-md-2">
                 <h6 className="text-uppercase font-weight-bold">
-                  <a href="#!" className="text-white">
-                    Documentation
-                  </a>
+                  <Link to="/documentation" className="text-white">Documentation</Link>
                 </h6>
               </div>
-
+              
               <div className="col-md-2">
                 <h6 className="text-uppercase font-weight-bold">
                   <Link to="/advertise" className="text-white">Advertise</Link>

@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import { ResetCSS } from '@evofinance9/uikit'
 import Home from 'pages/Home'
 import Advertise from 'pages/Advertise'
+import Documentation from 'pages/Documentation'
 import GlobalStyle from './style/Global'
 import App from './pages/App'
 import ApplicationUpdater from './state/application/updater'
@@ -29,6 +30,7 @@ ReactDOM.render(
       <Switch>
         <Route exact strict path="/" component={Home} />
         <Route exact strict path="/advertise" component={Advertise} />
+        <Route exact strict path="/documentation" component={Documentation} />
         <Providers>
           <>
             <ListsUpdater />

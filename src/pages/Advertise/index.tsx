@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import swal from 'sweetalert'
 
 import Header from 'pages/Home/Header'
+import Footer from "../../components/Footer"
 
 import sendMessage from './apicalls'
 
@@ -112,6 +113,7 @@ export default function Advertise() {
           </form>
         </div>
       </div>
+      <Footer />
     </>
   )
 }
