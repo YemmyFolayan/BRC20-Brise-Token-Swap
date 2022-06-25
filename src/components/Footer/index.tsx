@@ -23,9 +23,7 @@ export default function Footer() {
 
               <div className="col-md-2">
                 <h6 className="text-uppercase font-weight-bold">
-                  <a href="#!" className="text-white">
-                    Advertise
-                  </a>
+                  <Link to="/advertise" className="text-white">Advertise</Link>
                 </h6>
               </div>
 
