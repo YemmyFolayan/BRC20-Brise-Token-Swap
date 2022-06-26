@@ -38,6 +38,10 @@ export default function WatchlistTables() {
         return `https://evo-server.in/images/0x8fff93e810a2edaafc326edee51071da9d398e83.png`
       case 'BROGE2':
         return `https://evo-server.in/images/0x41c5ae56681Fb19334eCF7d914919805DaE2Ec8f.png`
+      case 'VEF2':
+        return `https://evo-server.in/images/0xd6447d2fa919811c41a064bdbdab1e281f8de9b2.jpeg`
+      case 'BPAD4':
+        return `https://evo-server.in/images/0x71946a5C9dA7C95ee804a9BE561EC15A3F286A7D.jpeg`
 
       default:
         return token.logo_url
@@ -80,7 +84,7 @@ export default function WatchlistTables() {
           <tbody>
             {searchResult.length === 0 &&
               tokens.map((token, idx) => {
-                if (token!.id !== 'OMNIA2') {
+                if (!["OMNIA2", "BDSL"].includes(token!.id)) {
                   return (
                     <tr key={token.id}>
                       <td style={{ width: '5%' }}>
@@ -111,7 +115,8 @@ export default function WatchlistTables() {
               })}
 
             {searchResult.map((token, idx) => {
-              if (token!.id !== 'OMNIA2') {
+              
+              if (!["OMNIA2", "BDSL"].includes(token!.id)) {
                 return (
                   <tr key={token.id}>
                     <td style={{ width: '5%' }}>

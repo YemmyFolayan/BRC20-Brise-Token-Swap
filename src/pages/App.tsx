@@ -20,7 +20,6 @@ import { TranslationsContext } from '../hooks/TranslationsContext'
 
 import Menu from '../components/Menu'
 
-
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;

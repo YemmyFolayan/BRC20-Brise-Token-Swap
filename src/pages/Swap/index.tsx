@@ -87,11 +87,11 @@ const Swap = () => {
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
   const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
-  const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
-    currencies[Field.INPUT],
-    currencies[Field.OUTPUT],
-    typedValue
-  )
+  const {
+    wrapType,
+    execute: onWrap,
+    inputError: wrapInputError,
+  } = useWrapCallback(currencies[Field.INPUT], currencies[Field.OUTPUT], typedValue)
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
   const trade = showWrap ? undefined : v2Trade
 
@@ -449,9 +449,7 @@ const Swap = () => {
                     style={{ width: '48%' }}
                     id="swap-button"
                     disabled={
-                      !isValid ||
-                      approval !== ApprovalState.APPROVED ||
-                      (priceImpactSeverity > 3 && !isExpertMode)
+                      !isValid || approval !== ApprovalState.APPROVED || (priceImpactSeverity > 3 && !isExpertMode)
                     }
                     variant={isValid && priceImpactSeverity > 2 ? 'danger' : 'primary'}
                   >
@@ -476,9 +474,7 @@ const Swap = () => {
                     }
                   }}
                   id="swap-button"
-                  disabled={
-                    !isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError
-                  }
+                  disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
                   variant={isValid && priceImpactSeverity > 2 && !swapCallbackError ? 'danger' : 'primary'}
                   width="100%"
                 >
@@ -495,6 +491,7 @@ const Swap = () => {
         </Wrapper>
       </AppBody>
       <AdvancedSwapDetailsDropdown trade={trade} />
+      
     </Container>
   )
 }

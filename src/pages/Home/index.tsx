@@ -62,7 +62,7 @@ export default function Home() {
                 >
                   {generateData().map((item) => (
                     <SwiperSlide className="p-2" key={item.id}>
-                      <a href="https://bitgert.com/" target="_blank" rel="noreferrer">
+                      <a href="https://tttttt.me/evofinances" target="_blank" rel="noreferrer">
                         <img src={BannerImg} alt="" />
                       </a>
                     </SwiperSlide>
