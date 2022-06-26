@@ -27,7 +27,7 @@ export default function Footer() {
 
               <div className="col-md-2">
                 <h6 className="text-uppercase font-weight-bold">
-                  <a href="https://tttttt.me/evofinances" className="text-white">
+                  <a href="https://t.me/+jk-Wq1rDZ98xZmFh" className="text-white">
                     Support
                   </a>
                 </h6>
