@@ -4,7 +4,7 @@ const config: MenuEntry[] = [
   {
     label: 'Home',
     icon: 'HomeIcon',
-    href: 'https://bitgertswap.netlify.app/',
+    href: 'https://bitgertswap.com/',
   },
   {
     label: 'Trade',
@@ -21,11 +21,11 @@ const config: MenuEntry[] = [
       },
       {
         label: 'Exchange',
-        href: 'https://bitgertswap.netlify.app/#/swap',
+        href: 'https://bitgertswap.com/#/swap',
       },
       {
         label: 'Liquidity',
-        href: 'https://bitgertswap.netlify.app/#/pool',
+        href: 'https://bitgertswap.com/#/pool',
       },
     ],
   },
