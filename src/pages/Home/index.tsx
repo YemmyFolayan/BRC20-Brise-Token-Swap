@@ -18,17 +18,20 @@ import Header from './Header'
 
 SwiperCore.use([Pagination, Autoplay])
 
-// remove this function after getting ads
-function generateData() {
-  const arr: any[] = []
-  for (let i = 11; i < 15; i++) {
-    arr.push({
-      id: i,
-      url: `https://picsum.photos/id/${i}/912/85`,
-    })
-  }
-  return arr
-}
+const banners: any[] = [
+  {
+    id: 0,
+    label: 'Centcex Banner',
+    hrefURL: `https://centcex.finance/`,
+    imageURL: `https://evo-server.in/images/banner-0.jpg`,
+  },
+  {
+    id: 1,
+    label: 'Evo Banner',
+    hrefURL: `https://tttttt.me/evofinances`,
+    imageURL: `https://evo-server.in/images/banner-1.jpg`,
+  },
+]
 
 export default function Home() {
   return (
@@ -56,14 +59,14 @@ export default function Home() {
                     },
                   }}
                   autoplay={{
-                    delay: 2000,
+                    delay: 15000,
                   }}
                   className="mySwiper"
                 >
-                  {generateData().map((item) => (
+                  {banners.map((item) => (
                     <SwiperSlide className="p-2" key={item.id}>
-                      <a href="https://tttttt.me/evofinances" target="_blank" rel="noreferrer">
-                        <img src={BannerImg} alt="" />
+                      <a href={item.hrefURL} target="_blank" rel="noreferrer">
+                        <img src={item.imageURL} alt={item.label} />
                       </a>
                     </SwiperSlide>
                   ))}

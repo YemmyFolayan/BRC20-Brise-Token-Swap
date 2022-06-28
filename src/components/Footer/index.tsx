@@ -70,7 +70,7 @@ export default function Footer() {
 
         <div className="text-center p-3" style={{ backgroundColor: ' rgba(0, 0, 0, 0.2)' }}>
           © {new Date().getFullYear()} Copyright:
-          <a className="text-white mx-1" href="https://mdbootstrap.com/">
+          <a className="text-white mx-1" href="https://bitgert.com/">
             Bitgert
           </a>
         </div>
