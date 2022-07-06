@@ -113,6 +113,14 @@
       "chainId": 32520,
       "decimals": 2,
       "logoURI": "https://evo-server.in/images/0x6D347fdCb302a5879545E01EceE7A176db23dCDa.png"
+    },
+    {
+      "name": "Brisecom",
+      "symbol": "BASKOM",
+      "address": "0x6cd08bE8Aa9B705Ca86B4923B1784C0eE06E5220",
+      "chainId": 32520,
+      "decimals": 9,
+      "logoURI": "https://evo-server.in/images/0x6cd08bE8Aa9B705Ca86B4923B1784C0eE06E5220.jpg"
     }
   ]
 }
