@@ -181,17 +181,17 @@ export default function CreateLaunchpad() {
       routerId: token_address,
       tier1Rate: tier1,
       tier2Rate: tier2,
-      publicRate: router_rate,
-      liquidityRate: listing_rate,
+      publicRate: tier3,
+      liquidityRate: router_rate,
       softCap: soft_cap,
       hardCap: hard_cap,
       defaultRouterRate: router_rate,
       routerRate: router_rate,
       isGold: false,
       isVesting: false,
-      firstReleaseAmount: 12,
-      vestingCyclePeriods: 12,
-      vestingCyclePercents: 12,
+      firstReleaseAmount: 12, // change this
+      vestingCyclePeriods: 12, // change this
+      vestingCyclePercents: 12, // change this
       ifCollectOtherToken: false,
       otherToken: '',
     }
