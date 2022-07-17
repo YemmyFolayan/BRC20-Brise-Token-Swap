@@ -2,6 +2,8 @@
 import React, { useState } from 'react'
 import swal from 'sweetalert'
 import Stepper from 'react-stepper-horizontal'
+import { BigNumber } from '@ethersproject/bignumber'
+import { TransactionResponse } from '@ethersproject/providers'
 
 import AdditionalInfo from './AdditionalInfo'
 import TokenInfo from './TokenInfo'
@@ -11,9 +13,17 @@ import Timing from './Timing'
 
 import addPresale from './apicalls'
 
+import { useActiveWeb3React } from 'hooks'
+import { usePresaleContract } from 'hooks/useContract'
+import { bnDivideByDecimal, getPresaleContract, calculateGasMargin } from 'utils'
+
 import './style.css'
 
 export default function CreateLaunchpad() {
+  const { account, chainId, library } = useActiveWeb3React()
+  const presaleContract = usePresaleContract()
+
+  const [currentSaleId, setCurrentSaleId] = useState(0)
   const [state, setState] = useState({
     steps: [
       {
@@ -118,6 +128,96 @@ export default function CreateLaunchpad() {
   const onClickNext = () => setState((prev) => ({ ...prev, currentStep: prev.currentStep + 1 }))
   const onClickPrev = () =>
     setState((prev) => ({ ...prev, currentStep: prev.currentStep !== 0 ? prev.currentStep - 1 : prev.currentStep }))
+
+  const createPresale = async (formData) => {
+    if (!chainId || !library || !account) return
+    const presale = getPresaleContract(chainId, library, account)
+
+    const {
+      token_address,
+      token_name,
+      token_symbol,
+      token_decimal,
+      soft_cap,
+      hard_cap,
+      tier1,
+      tier2,
+      tier3,
+      min_buy,
+      max_buy,
+      router_rate,
+      listing_rate,
+      logo_link,
+      website_link,
+      github_link,
+      twitter_link,
+      reddit_link,
+      telegram_link,
+      project_dec,
+      certik_audit,
+      doxxed_team,
+      utility,
+      kyc,
+      start_time,
+      end_time,
+      tier1_time,
+      tier2_time,
+      lock_time,
+    } = formData
+
+    // get sale Id
+    const currentPresaleId = await presaleContract?.callStatic.currentPresaleId()
+
+    const payload = {
+      saleId: currentPresaleId,
+      token: token_address,
+      minContributeRate: min_buy,
+      maxContributeRate: max_buy,
+      startTime: start_time,
+      tier1Time: tier1_time,
+      tier2Time: tier2_time,
+      endTime: end_time,
+      liquidityLockTime: lock_time,
+      routerId: token_address,
+      tier1Rate: tier1,
+      tier2Rate: tier2,
+      publicRate: router_rate,
+      liquidityRate: listing_rate,
+      softCap: soft_cap,
+      hardCap: hard_cap,
+      defaultRouterRate: router_rate,
+      routerRate: router_rate,
+      isGold: false,
+      isVesting: false,
+      firstReleaseAmount: 12,
+      vestingCyclePeriods: 12,
+      vestingCyclePercents: 12,
+      ifCollectOtherToken: false,
+      otherToken: '',
+    }
+
+    const estimate = presale.estimateGas.createPresale
+    const method: (...args: any) => Promise<TransactionResponse> = presale.createPresale
+    const args: Array<object | string[] | number> = [payload]
+    const value: BigNumber | null = null
+
+    await estimate(...args)
+      .then((estimatedGasLimit) =>
+        method(...args, {
+          ...(value ? { value } : {}),
+          gasLimit: calculateGasMargin(estimatedGasLimit),
+        }).then((response) => {
+          console.log(response)
+        })
+      )
+      .catch((e) => {
+        // we only care if the error is something _other_ than the user rejected the tx
+        if (e?.code !== 4001) {
+          console.error(e)
+          alert(e.message)
+        }
+      })
+  }
 
   const handleSubmit = () => {
     // validation

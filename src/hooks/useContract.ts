@@ -3,6 +3,7 @@ import { ChainId, WETH } from '@evofinance9/sdk'
 import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
 import { useMemo } from 'react'
 import { REWARD_ABI, REWARD_ADDRESS } from 'constants/abis/reward'
+import { PRESALE_ABI, PRESALE_ADDRESS } from 'constants/abis/presale'
 import ENS_ABI from '../constants/abis/ens-registrar.json'
 import ENS_PUBLIC_RESOLVER_ABI from '../constants/abis/ens-public-resolver.json'
 import { ERC20_BYTES32_ABI } from '../constants/abis/erc20'
@@ -67,4 +68,8 @@ export function useMulticallContract(): Contract | null {
 
 export function useRewardContract(withSignerIfPossible?: boolean): Contract | null {
   return useContract(REWARD_ADDRESS, REWARD_ABI, withSignerIfPossible)
+}
+
+export function usePresaleContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract(PRESALE_ADDRESS, PRESALE_ABI, withSignerIfPossible)
 }

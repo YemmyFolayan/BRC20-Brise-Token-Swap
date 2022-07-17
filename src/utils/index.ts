@@ -7,6 +7,7 @@ import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@evofinance9/sdk'
 import { REWARD_ABI, REWARD_ADDRESS } from 'constants/abis/reward'
+import { PRESALE_ABI, PRESALE_ADDRESS } from 'constants/abis/presale'
 import { ROUTER_ABI, ROUTER_ADDRESS } from '../constants'
 import { TokenAddressMap } from '../state/lists/hooks'
 
@@ -96,6 +97,10 @@ export function getRouterContract(_: number, library: Web3Provider, account?: st
 
 export function getRewardContract(_: number, library: Web3Provider, account?: string): Contract {
   return getContract(REWARD_ADDRESS, REWARD_ABI, library, account)
+}
+
+export function getPresaleContract(_: number, library: Web3Provider, account?: string): Contract {
+  return getContract(PRESALE_ADDRESS, PRESALE_ABI, library, account)
 }
 
 export function escapeRegExp(string: string): string {
