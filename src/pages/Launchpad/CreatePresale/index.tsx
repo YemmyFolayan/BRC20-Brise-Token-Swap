@@ -16,6 +16,7 @@ import Timing from './Timing'
 
 import addPresale from './apicalls'
 
+import { ROUTER_ADDRESS } from 'constants/index'
 import { useActiveWeb3React } from 'hooks'
 import { usePresaleContract } from 'hooks/useContract'
 import { bnDivideByDecimal, getPresaleContract, calculateGasMargin } from 'utils'
@@ -25,7 +26,7 @@ import { AppBodyExtended } from 'pages/AppBody'
 
 export default function CreatePresale() {
   const { account, chainId, library } = useActiveWeb3React()
-  const presaleContract = usePresaleContract()
+  const presaleContract = usePresaleContract(true)
 
   const [currentSaleId, setCurrentSaleId] = useState(0)
   const [state, setState] = useState({
@@ -72,17 +73,17 @@ export default function CreatePresale() {
   const [formData, setFormData] = useState({
     chain_id: '32520',
     owner_address: '',
-    token_address: '',
-    token_name: '',
-    token_symbol: '',
-    token_decimal: '',
-    tier1: '',
-    tier2: '',
-    tier3: '',
-    soft_cap: '',
-    hard_cap: '',
-    min_buy: '',
-    max_buy: '',
+    token_address: '0x9892fFB5Ec3Eaa1EE980B8c14976A71c8455374b',
+    token_name: 'BSC Token',
+    token_symbol: 'BSC',
+    token_decimal: '18',
+    tier1: '100',
+    tier2: '200',
+    tier3: '300',
+    soft_cap: '1000',
+    hard_cap: '2000',
+    min_buy: '10',
+    max_buy: '100',
     router_rate: '',
     default_router_rate: '',
     listing_rate: '',
@@ -157,7 +158,9 @@ export default function CreatePresale() {
 
     // get sale Id
     const currentPresaleId = await presaleContract?.callStatic.currentPresaleId()
+    console.log(currentPresaleId.toNumber())
     const currentFee = await presaleContract?.callStatic.currentFee()
+    console.log(bnDivideByDecimal(currentFee).toNumber())
 
     const payload = {
       saleId: currentPresaleId,
@@ -169,7 +172,7 @@ export default function CreatePresale() {
       tier2Time: moment(tier2_time).format('X'),
       endTime: moment(end_time).format('X'),
       liquidityLockTime: moment(lock_time).format('X'),
-      routerId: token_address,
+      routerId: ROUTER_ADDRESS,
       tier1Rate: tier1,
       tier2Rate: tier2,
       publicRate: tier3,
@@ -184,8 +187,8 @@ export default function CreatePresale() {
       otherToken: '',
     }
 
-    const estimate = presale.estimateGas.createPresale
-    const method: (...args: any) => Promise<TransactionResponse> = presale.createPresale
+    const estimate = presaleContract!.estimateGas.createPresale
+    const method: (...args: any) => Promise<TransactionResponse> = presaleContract!.createPresale
     const args: Array<object | string[] | number> = [payload]
     const value: BigNumber | null = currentFee
 
