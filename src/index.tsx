@@ -27,32 +27,29 @@ window.addEventListener('error', () => {
   localStorage?.removeItem('redux_localstorage_simple_lists')
 })
 
-
-
 ReactDOM.render(
   <StrictMode>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
-        <HashRouter>
-          <Switch>
-            <Route exact strict path="/" component={Home} />
-            <Route exact strict path="/advertise" component={Advertise} />
-            <Route exact strict path="/documentation" component={Documentation} />
-            <Route exact strict path="/launchpad" component={Launchpad} />
-            <Providers>
-              <>
-                <ListsUpdater />
-                <ApplicationUpdater />
-                <TransactionUpdater />
-                <MulticallUpdater />
-                <ToastListener />
-              </>
-              <ResetCSS />
-              <GlobalStyle />
-              <App />
-            </Providers>
-          </Switch>
-        </HashRouter>
-      </MuiPickersUtilsProvider>
+    <MuiPickersUtilsProvider utils={MomentUtils}>
+      <HashRouter>
+        <Switch>
+          <Route exact strict path="/" component={Home} />
+          <Route exact strict path="/advertise" component={Advertise} />
+          <Route exact strict path="/documentation" component={Documentation} />
+          <Providers>
+            <>
+              <ListsUpdater />
+              <ApplicationUpdater />
+              <TransactionUpdater />
+              <MulticallUpdater />
+              <ToastListener />
+            </>
+            <ResetCSS />
+            <GlobalStyle />
+            <App />
+          </Providers>
+        </Switch>
+      </HashRouter>
+    </MuiPickersUtilsProvider>
   </StrictMode>,
   document.getElementById('root')
 )

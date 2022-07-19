@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react'
-
+import { Input, CardBody } from '@evofinance9/uikit'
 import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
 
 import '@djthoms/pretty-checkbox'
@@ -40,92 +40,71 @@ export default function AdditionalInfo({ handleChange, data }: FormComponentProp
   } = data
 
   return (
-    <>
+    <CardBody>
       <div className="mb-3">
-        <label htmlFor="inputLogoLink" className="form-label">
-          Logo Link: (URL must end with a supported image extension png, jpg, jpeg or gif)
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="inputLogoLink"
+        <Input
+          placeholder="Logo Link (URL must end with a supported image extension png, jpg, jpeg or gif)"
+          className="mt-3"
+          scale="lg"
           value={logo_link}
           onChange={handleChange('logo_link')}
         />
       </div>
 
       <div className="mb-3">
-        <label htmlFor="inputWebsiteLink" className="form-label">
-          Website Link
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="inputWebsiteLink"
+        <Input
+          placeholder="Website Link"
+          className="mt-3"
+          scale="lg"
           value={website_link}
           onChange={handleChange('website_link')}
         />
       </div>
 
       <div className="mb-3">
-        <label htmlFor="inputGithubLink" className="form-label">
-          GitHub Link
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="inputGithubLink"
+        <Input
+          placeholder="GitHub Link"
+          className="mt-3"
+          scale="lg"
           value={github_link}
           onChange={handleChange('github_link')}
         />
       </div>
 
       <div className="mb-3">
-        <label htmlFor="inputTwitterLink" className="form-label">
-          Twitter Link
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="inputTwitterLink"
+        <Input
+          placeholder="Twitter Link"
+          className="mt-3"
+          scale="lg"
           value={twitter_link}
           onChange={handleChange('twitter_link')}
         />
       </div>
       <div className="mb-3">
-        <label htmlFor="inputRedditLink" className="form-label">
-          Reddit Link
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="inputRedditLink"
+        <Input
+          placeholder="Reddit Link"
+          className="mt-3"
+          scale="lg"
           value={reddit_link}
           onChange={handleChange('reddit_link')}
         />
       </div>
       <div className="mb-3">
-        <label htmlFor="inputTelegramLink" className="form-label">
-          Telegram Link
-        </label>
-        <input
-          type="text"
-          className="form-control"
-          id="inputTelegramLink"
+        <Input
+          placeholder="Telegram Link"
+          className="mt-3"
+          scale="lg"
           value={telegram_link}
           onChange={handleChange('telegram_link')}
         />
       </div>
       <div className="mb-3">
-        <label htmlFor="inputProjectDescription" className="form-label">
-          Project Description
-        </label>
-        <textarea
-          className="form-control"
-          id="inputProjectDescription"
+        <Input
+          placeholder="Project Description"
+          className="mt-3"
+          scale="lg"
           value={project_dec}
           onChange={handleChange('project_dec')}
-          rows={3}
         />
       </div>
 
@@ -184,6 +163,6 @@ export default function AdditionalInfo({ handleChange, data }: FormComponentProp
           </Checkbox>
         </div>
       </div>
-    </>
+    </CardBody>
   )
 }

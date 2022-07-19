@@ -3,7 +3,10 @@ import React, { useState } from 'react'
 import swal from 'sweetalert'
 import Stepper from 'react-stepper-horizontal'
 import { BigNumber } from '@ethersproject/bignumber'
+import { Button } from '@evofinance9/uikit'
 import { TransactionResponse } from '@ethersproject/providers'
+import moment from 'moment'
+import Container from 'components/Container'
 
 import AdditionalInfo from './AdditionalInfo'
 import TokenInfo from './TokenInfo'
@@ -18,8 +21,9 @@ import { usePresaleContract } from 'hooks/useContract'
 import { bnDivideByDecimal, getPresaleContract, calculateGasMargin } from 'utils'
 
 import './style.css'
+import { AppBodyExtended } from 'pages/AppBody'
 
-export default function CreateLaunchpad() {
+export default function CreatePresale() {
   const { account, chainId, library } = useActiveWeb3React()
   const presaleContract = usePresaleContract()
 
@@ -135,9 +139,6 @@ export default function CreateLaunchpad() {
 
     const {
       token_address,
-      token_name,
-      token_symbol,
-      token_decimal,
       soft_cap,
       hard_cap,
       tier1,
@@ -146,38 +147,28 @@ export default function CreateLaunchpad() {
       min_buy,
       max_buy,
       router_rate,
-      listing_rate,
-      logo_link,
-      website_link,
-      github_link,
-      twitter_link,
-      reddit_link,
-      telegram_link,
-      project_dec,
-      certik_audit,
-      doxxed_team,
-      utility,
-      kyc,
       start_time,
       end_time,
       tier1_time,
       tier2_time,
       lock_time,
     } = formData
+    console.log(account)
 
     // get sale Id
     const currentPresaleId = await presaleContract?.callStatic.currentPresaleId()
+    const currentFee = await presaleContract?.callStatic.currentFee()
 
     const payload = {
       saleId: currentPresaleId,
       token: token_address,
       minContributeRate: min_buy,
       maxContributeRate: max_buy,
-      startTime: start_time,
-      tier1Time: tier1_time,
-      tier2Time: tier2_time,
-      endTime: end_time,
-      liquidityLockTime: lock_time,
+      startTime: moment(start_time).format('X'),
+      tier1Time: moment(tier1_time).format('X'),
+      tier2Time: moment(tier2_time).format('X'),
+      endTime: moment(end_time).format('X'),
+      liquidityLockTime: moment(lock_time).format('X'),
       routerId: token_address,
       tier1Rate: tier1,
       tier2Rate: tier2,
@@ -189,9 +180,6 @@ export default function CreateLaunchpad() {
       routerRate: router_rate,
       isGold: false,
       isVesting: false,
-      firstReleaseAmount: 12, // change this
-      vestingCyclePeriods: 12, // change this
-      vestingCyclePercents: 12, // change this
       ifCollectOtherToken: false,
       otherToken: '',
     }
@@ -199,7 +187,7 @@ export default function CreateLaunchpad() {
     const estimate = presale.estimateGas.createPresale
     const method: (...args: any) => Promise<TransactionResponse> = presale.createPresale
     const args: Array<object | string[] | number> = [payload]
-    const value: BigNumber | null = null
+    const value: BigNumber | null = currentFee
 
     await estimate(...args)
       .then((estimatedGasLimit) =>
@@ -287,6 +275,8 @@ export default function CreateLaunchpad() {
       return
     }
 
+    createPresale(formData)
+
     addPresale(formData)
       .then((data) => {
         if (data.error) {
@@ -344,41 +334,41 @@ export default function CreateLaunchpad() {
 
   return (
     <>
-      <Stepper
-        steps={steps}
-        activeStep={currentStep}
-        completeTitleColor="#fff"
-        activeTitleColor="#fff"
-        completeColor="#F9D849"
-        activeColor="#F9D849"
-        completeBarColor="#F9D849"
-      />
+      <Container>
+        <AppBodyExtended>
+          <Stepper
+            steps={steps}
+            activeStep={currentStep}
+            completeTitleColor="#fff"
+            activeTitleColor="#fff"
+            completeColor="#F9D849"
+            activeColor="#F9D849"
+            completeBarColor="#F9D849"
+          />
 
-      <div className="container text-white mb-5 form__container extend__form__container__width">
-        <form>
-          {currentStep === 0 && <TokenInfo data={formData} handleChange={handleChange} />}
-          {currentStep === 1 && <PresaleRate data={formData} handleChange={handleChange} />}
-          {currentStep === 2 && <SwapInfo data={formData} handleChange={handleChange} />}
-          {currentStep === 3 && <AdditionalInfo data={formData} handleChange={handleChange} />}
-          {currentStep === 4 && <Timing data={formData} handleChange={handleDateChange} />}
-        </form>
+          <div className=" text-white mb-5  ">
+            <form>
+              {currentStep === 0 && <TokenInfo data={formData} handleChange={handleChange} />}
+              {currentStep === 1 && <PresaleRate data={formData} handleChange={handleChange} />}
+              {currentStep === 2 && <SwapInfo data={formData} handleChange={handleChange} />}
+              {currentStep === 3 && <AdditionalInfo data={formData} handleChange={handleChange} />}
+              {currentStep === 4 && <Timing data={formData} handleChange={handleDateChange} />}
+            </form>
 
-        <div className="d-flex justify-content-center gap-3">
-          <button type="button" onClick={onClickPrev} className="btn btn-outline-secondary extended__btn m-1">
-            Back
-          </button>
-          {currentStep === 4 ? (
-            <button type="button" onClick={handleSubmit} className="btn btn-outline-warning extended__btn m-1">
-              Submit
-            </button>
-          ) : (
-            <button type="button" onClick={onClickNext} className="btn btn-outline-warning extended__btn m-1">
-              Next
-            </button>
-          )}
-        </div>
-      </div>
+            <div className="d-flex justify-content-center gap-3 mt-3">
+              <Button variant="subtle" className="mx-2" onClick={onClickPrev}>
+                Prev
+              </Button>
 
+              {currentStep === 4 ? (
+                <Button onClick={handleSubmit}>Submit</Button>
+              ) : (
+                <Button onClick={onClickNext}>Next</Button>
+              )}
+            </div>
+          </div>
+        </AppBodyExtended>
+      </Container>
       <div className="mt-5"> </div>
     </>
   )

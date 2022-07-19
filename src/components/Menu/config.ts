@@ -2,29 +2,42 @@ import { MenuEntry } from '@evofinance9/uikit'
 
 const config: MenuEntry[] = [
   {
-    label: 'Home',
-    icon: 'HomeIcon',
+    label: 'Farms',
+    icon: 'FarmIcon',
     href: 'https://bitgertswap.com/',
   },
   {
-    label: 'Trade',
-    icon: 'TradeIcon',
-    initialOpenState: true,
-    status: {
-      text: 'MIGRATE',
-      color: 'warning',
-    },
+    label: 'Charts',
+    icon: 'TicketIcon',
+    href: 'https://bitgertswap.com/',
+  },
+  {
+    label: 'BitgertPad',
+    icon: 'IfoIcon',
+    initialOpenState: false,
     items: [
       {
-        label: 'LP Migration',
-        href: '/migrate',
+        label: 'Create Presale',
+        href: '/create-presale',
       },
       {
-        label: 'Exchange',
+        label: 'Presale Directory',
         href: 'https://bitgertswap.com/#/swap',
       },
       {
-        label: 'Liquidity',
+        label: 'Airdrop',
+        href: 'https://bitgertswap.com/#/pool',
+      },
+      {
+        label: 'Airdrop Directory',
+        href: 'https://bitgertswap.com/#/pool',
+      },
+      {
+        label: 'Lock Tokens',
+        href: 'https://bitgertswap.com/#/pool',
+      },
+      {
+        label: 'Lockers',
         href: 'https://bitgertswap.com/#/pool',
       },
     ],

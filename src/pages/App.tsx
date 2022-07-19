@@ -13,12 +13,14 @@ import RemoveLiquidity from './RemoveLiquidity'
 import Reward from './Reward'
 import Swap from './Swap'
 import Migration from './Migration'
+import CreatePresale from './Launchpad/CreatePresale'
 import { RedirectPathToSwapOnly } from './Swap/redirects'
 import { EN, allLanguages } from '../constants/localisation/languageCodes'
 import { LanguageContext } from '../hooks/LanguageContext'
 import { TranslationsContext } from '../hooks/TranslationsContext'
 
 import Menu from '../components/Menu'
+
 
 const AppWrapper = styled.div`
   display: flex;
@@ -67,47 +69,43 @@ export default function App() {
 
   return (
     <Suspense fallback={null}>
-          <AppWrapper>
-            <LanguageContext.Provider
-              value={{
-                selectedLanguage,
-                setSelectedLanguage: handleLanguageSelect,
-                translatedLanguage,
-                setTranslatedLanguage,
-              }}
-            >
-              <TranslationsContext.Provider value={{ translations, setTranslations }}>
-                <Menu>
-                  <BodyWrapper>
-                    <Popups />
-                    <Web3ReactManager>
-                      <>
-                        <Route exact strict path="/swap" component={Swap} />
-                        <Route exact strict path="/find" component={PoolFinder} />
-                        <Route exact strict path="/pool" component={Pool} />
-                        <Route exact strict path="/reward" component={Reward} />
-                        <Route exact path="/add" component={AddLiquidity} />
-                        <Route exact path="/migrate" component={Migration} />
-                        <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
+      <AppWrapper>
+        <LanguageContext.Provider
+          value={{
+            selectedLanguage,
+            setSelectedLanguage: handleLanguageSelect,
+            translatedLanguage,
+            setTranslatedLanguage,
+          }}
+        >
+          <TranslationsContext.Provider value={{ translations, setTranslations }}>
+            <Menu>
+              <BodyWrapper>
+                <Popups />
+                <Web3ReactManager>
+                  <>
+                    <Route exact strict path="/swap" component={Swap} />
+                    <Route exact strict path="/find" component={PoolFinder} />
+                    <Route exact strict path="/pool" component={Pool} />
+                    <Route exact strict path="/reward" component={Reward} />
+                    <Route exact path="/add" component={AddLiquidity} />
+                    <Route exact path="/migrate" component={Migration} />
+                    <Route exact strict path="/create-presale" component={CreatePresale} />
+                    <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
 
-                        {/* Redirection: These old routes are still used in the code base */}
-                        <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
-                        <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
-                        <Route
-                          exact
-                          strict
-                          path="/remove/:tokens"
-                          component={RedirectOldRemoveLiquidityPathStructure}
-                        />
+                    {/* Redirection: These old routes are still used in the code base */}
+                    <Route exact path="/add/:currencyIdA" component={RedirectOldAddLiquidityPathStructure} />
+                    <Route exact path="/add/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
+                    <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
 
-                        <Route component={RedirectPathToSwapOnly} />
-                      </>
-                    </Web3ReactManager>
-                  </BodyWrapper>
-                </Menu>
-              </TranslationsContext.Provider>
-            </LanguageContext.Provider>
-          </AppWrapper>
+                    <Route component={RedirectPathToSwapOnly} />
+                  </>
+                </Web3ReactManager>
+              </BodyWrapper>
+            </Menu>
+          </TranslationsContext.Provider>
+        </LanguageContext.Provider>
+      </AppWrapper>
     </Suspense>
   )
 }

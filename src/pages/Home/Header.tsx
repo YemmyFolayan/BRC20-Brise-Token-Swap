@@ -26,9 +26,6 @@ const Header = () => {
 						<Link to="/swap">
 							<button className="btn" type="button">Swap</button>
 						</Link>
-						<Link to="/launchpad">
-							<button className="btn" type="button">Launchpad</button>
-						</Link>
 					</Form>
 				</Navbar.Collapse>
 			</Container>
