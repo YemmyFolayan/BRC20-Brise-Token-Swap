@@ -1,0 +1,19 @@
+.dot {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 50% !important;
+}
+
+.presale__logo img {
+  max-width: 90px;
+  max-height: 90px;
+}
+
+.presale__progress {
+  height: 8px;
+}
+
+.presale__card{
+  background-color:  #2e2e2e !important;
+}
+

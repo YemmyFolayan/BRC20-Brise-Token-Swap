@@ -1,11 +1,13 @@
 /* eslint-disable */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import swal from 'sweetalert'
+import { BigNumber as BN } from 'bignumber.js'
 import Stepper from 'react-stepper-horizontal'
+import { ethers } from 'ethers'
+
 import { BigNumber } from '@ethersproject/bignumber'
 import { Button } from '@evofinance9/uikit'
 import { TransactionResponse } from '@ethersproject/providers'
-import moment from 'moment'
 import Container from 'components/Container'
 
 import AdditionalInfo from './AdditionalInfo'
@@ -18,17 +20,25 @@ import addPresale from './apicalls'
 
 import { ROUTER_ADDRESS } from 'constants/index'
 import { useActiveWeb3React } from 'hooks'
-import { usePresaleContract } from 'hooks/useContract'
-import { bnDivideByDecimal, getPresaleContract, calculateGasMargin } from 'utils'
+import { usePresaleContract, useDateTimeContract } from 'hooks/useContract'
+import { getPresaleContract } from 'utils'
+import getUnixTimestamp from 'utils/getUnixTimestamp'
 
 import './style.css'
 import { AppBodyExtended } from 'pages/AppBody'
+import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
 
 export default function CreatePresale() {
   const { account, chainId, library } = useActiveWeb3React()
   const presaleContract = usePresaleContract(true)
+  const dateTimeContract = useDateTimeContract()
 
   const [currentSaleId, setCurrentSaleId] = useState(0)
+  const [txHash, setTxHash] = useState<string>('')
+  // modal and loading
+  const [showConfirm, setShowConfirm] = useState<boolean>(false)
+  const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false) // clicked confirm
+
   const [state, setState] = useState({
     steps: [
       {
@@ -87,13 +97,13 @@ export default function CreatePresale() {
     router_rate: '',
     default_router_rate: '',
     listing_rate: '',
-    logo_link: '',
-    website_link: '',
-    github_link: '',
-    twitter_link: '',
-    reddit_link: '',
-    telegram_link: '',
-    project_dec: '',
+    logo_link: 'demo',
+    website_link: 'demo',
+    github_link: 'demo',
+    twitter_link: 'demo',
+    reddit_link: 'demo',
+    telegram_link: 'demo',
+    project_dec: 'demo',
     update_dec: '',
     token_level: '',
     start_time: new Date(),
@@ -126,8 +136,12 @@ export default function CreatePresale() {
     }
   }
 
+  const handleDismissConfirmation = () => {
+    setShowConfirm(false)
+    setTxHash('')
+  }
+
   const handleDateChange = (name, value) => {
-    console.log(value)
     setFormData({ ...formData, [name]: value })
   }
   const onClickNext = () => setState((prev) => ({ ...prev, currentStep: prev.currentStep + 1 }))
@@ -154,54 +168,58 @@ export default function CreatePresale() {
       tier2_time,
       lock_time,
     } = formData
-    console.log(account)
 
     // get sale Id
     const currentPresaleId = await presaleContract?.callStatic.currentPresaleId()
-    console.log(currentPresaleId.toNumber())
     const currentFee = await presaleContract?.callStatic.currentFee()
-    console.log(bnDivideByDecimal(currentFee).toNumber())
 
-    const payload = {
-      saleId: currentPresaleId,
-      token: token_address,
-      minContributeRate: min_buy,
-      maxContributeRate: max_buy,
-      startTime: moment(start_time).format('X'),
-      tier1Time: moment(tier1_time).format('X'),
-      tier2Time: moment(tier2_time).format('X'),
-      endTime: moment(end_time).format('X'),
-      liquidityLockTime: moment(lock_time).format('X'),
-      routerId: ROUTER_ADDRESS,
-      tier1Rate: tier1,
-      tier2Rate: tier2,
-      publicRate: tier3,
-      liquidityRate: router_rate,
-      softCap: soft_cap,
-      hardCap: hard_cap,
-      defaultRouterRate: router_rate,
-      routerRate: router_rate,
-      isGold: false,
-      isVesting: false,
-      ifCollectOtherToken: false,
-      otherToken: '',
-    }
+    const payload = [
+      currentPresaleId.toNumber(),
+      token_address,
+      min_buy,
+      max_buy,
+      await getUnixTimestamp(dateTimeContract, start_time),
+      await getUnixTimestamp(dateTimeContract, tier1_time),
+      await getUnixTimestamp(dateTimeContract, tier2_time),
+      await getUnixTimestamp(dateTimeContract, end_time),
+      await getUnixTimestamp(dateTimeContract, lock_time),
+      ROUTER_ADDRESS,
+      tier1,
+      tier2,
+      tier3,
+      router_rate,
+      soft_cap,
+      hard_cap,
+      router_rate,
+      router_rate,
+      false,
+      false,
+      '100',
+      '86400',
+      '2',
+      false,
+      '0xa131AD247055FD2e2aA8b156A11bdEc81b9eAD95',
+    ]
 
-    const estimate = presaleContract!.estimateGas.createPresale
-    const method: (...args: any) => Promise<TransactionResponse> = presaleContract!.createPresale
+    const method: (...args: any) => Promise<TransactionResponse> = presale!.createPresale
     const args: Array<object | string[] | number> = [payload]
-    const value: BigNumber | null = currentFee
+    const value: BigNumber = ethers.utils.parseEther(`${ethers.utils.formatEther(currentFee.toString())}`)
 
-    await estimate(...args)
-      .then((estimatedGasLimit) =>
-        method(...args, {
-          ...(value ? { value } : {}),
-          gasLimit: calculateGasMargin(estimatedGasLimit),
-        }).then((response) => {
-          console.log(response)
-        })
-      )
+    console.log(currentFee.toString())
+    console.log(value)
+    console.log(value.toString())
+
+    setAttemptingTxn(true)
+    await method(...args, {
+      value: value,
+    })
+      .then((response) => {
+        setAttemptingTxn(false)
+        console.log(response)
+        setTxHash(response.hash)
+      })
       .catch((e) => {
+        setAttemptingTxn(false)
         // we only care if the error is something _other_ than the user rejected the tx
         if (e?.code !== 4001) {
           console.error(e)
@@ -339,6 +357,16 @@ export default function CreatePresale() {
     <>
       <Container>
         <AppBodyExtended>
+          {txHash && (
+            <TransactionConfirmationModal
+              isOpen={true}
+              onDismiss={handleDismissConfirmation}
+              attemptingTxn={false}
+              hash={txHash}
+              content={() => <></>}
+              pendingText={''}
+            />
+          )}
           <Stepper
             steps={steps}
             activeStep={currentStep}

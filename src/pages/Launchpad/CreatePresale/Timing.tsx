@@ -2,7 +2,7 @@
 import React from 'react'
 import { DateTimePicker } from '@material-ui/pickers'
 import { Input, CardBody } from '@evofinance9/uikit'
-import { makeStyles, TextField, withStyles } from '@material-ui/core'
+import {  TextField, withStyles } from '@material-ui/core'
 
 interface FormComponentProps {
   handleChange: (params1: any, params2: any) => any
