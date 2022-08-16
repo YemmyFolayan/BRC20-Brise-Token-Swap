@@ -2,6 +2,16 @@ import { MenuEntry } from '@evofinance9/uikit'
 
 const config: MenuEntry[] = [
   {
+    label: 'Dashboard',
+    icon: 'FarmIcon',
+    href: '/dashboard',
+  },
+  {
+    label: 'Trade',
+    icon: 'TradeIcon',
+    href: '/swap',
+  },
+  {
     label: 'Farms',
     icon: 'FarmIcon',
     href: 'https://bitgertswap.com/',

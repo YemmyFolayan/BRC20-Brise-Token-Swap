@@ -5,6 +5,8 @@ import { Card } from '@evofinance9/uikit'
 export const BodyWrapper = styled(Card)`
   position: relative;
   max-width: 436px;
+  min-width: 380px;
+  height: 100%;
   width: 100%;
   z-index: 5;
 `
@@ -24,6 +26,6 @@ export default function AppBody({ children }: { children: React.ReactNode }) {
   return <BodyWrapper>{children}</BodyWrapper>
 }
 
-export const  AppBodyExtended = ({ children }: { children: React.ReactNode }) => {
+export const AppBodyExtended = ({ children }: { children: React.ReactNode }) => {
   return <BodyWrapperExtended>{children}</BodyWrapperExtended>
 }

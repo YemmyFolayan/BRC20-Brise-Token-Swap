@@ -16,7 +16,6 @@ const Container = styled.div`
   }
 
   ${({ theme }) => theme.mediaQueries.lg} {
-    min-height: 90vh;
   }
 `
 
