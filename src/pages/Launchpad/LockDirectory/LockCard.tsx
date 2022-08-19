@@ -49,7 +49,7 @@ export default function LockCard({ data }: LockCardProps) {
     <tbody>
       <tr>
         <td>
-          {token_name} <br /> {token_symbol}{' '}
+          {token_name} <br /> {token_symbol}
         </td>
         <td>{amount}</td>
         <td>{amount}</td>
