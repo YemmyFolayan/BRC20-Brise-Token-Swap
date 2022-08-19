@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { RouteComponentProps } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
-import { CardBody, Text as UIKitText } from '@evofinance9/uikit'
+import { CardBody } from '@evofinance9/uikit'
 import { useActiveWeb3React } from 'hooks'
 import CardNav from 'components/CardNav'
 import Container from 'components/Container'
@@ -25,7 +24,6 @@ export default function Reward() {
       for (let i = 0; i < res.toNumber(); i++) {
         const res2 = await rewardContract?.callStatic.tokenXAmount(account, i)
         const balance = parseFloat(bnDivideByDecimal(res2[0]).toNumber().toFixed(3))
-        console.log(i, balance)
         setBalances((prev) => (prev ? [...prev, balance] : [balance]))
       }
     }
@@ -46,8 +44,6 @@ export default function Reward() {
         method(...args, {
           ...(value ? { value } : {}),
           gasLimit: calculateGasMargin(estimatedGasLimit),
-        }).then((response) => {
-          console.log(response)
         })
       )
       .catch((e) => {

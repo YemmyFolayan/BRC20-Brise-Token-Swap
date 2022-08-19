@@ -4,6 +4,8 @@ import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.
 import { useMemo } from 'react'
 import { REWARD_ABI, REWARD_ADDRESS } from 'constants/abis/reward'
 import { PRESALE_ABI, PRESALE_ADDRESS, DATETIME_ABI, DATETIME_ADDRESS } from 'constants/abis/presale'
+import { AIRDROP_ABI, AIRDROP_ADDRESS } from '../constants/abis/airdrop'
+import { LOCK_ABI, LOCK_ADDRESS } from '../constants/abis/lock'
 import ENS_ABI from '../constants/abis/ens-registrar.json'
 import ENS_PUBLIC_RESOLVER_ABI from '../constants/abis/ens-public-resolver.json'
 import { ERC20_BYTES32_ABI } from '../constants/abis/erc20'
@@ -76,4 +78,12 @@ export function usePresaleContract(withSignerIfPossible?: boolean): Contract | n
 
 export function useDateTimeContract(withSignerIfPossible?: boolean): Contract | null {
   return useContract(DATETIME_ADDRESS, DATETIME_ABI, withSignerIfPossible)
+}
+
+export function useAirdropContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract(AIRDROP_ADDRESS, AIRDROP_ABI, withSignerIfPossible)
+}
+
+export function useBitgertLockContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract(LOCK_ADDRESS, LOCK_ABI, withSignerIfPossible)
 }

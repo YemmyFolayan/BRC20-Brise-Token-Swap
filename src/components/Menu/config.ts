@@ -3,23 +3,13 @@ import { MenuEntry } from '@evofinance9/uikit'
 const config: MenuEntry[] = [
   {
     label: 'Dashboard',
-    icon: 'FarmIcon',
+    icon: 'TicketIcon',
     href: '/dashboard',
   },
   {
     label: 'Trade',
     icon: 'TradeIcon',
     href: '/swap',
-  },
-  {
-    label: 'Farms',
-    icon: 'FarmIcon',
-    href: 'https://bitgertswap.com/',
-  },
-  {
-    label: 'Charts',
-    icon: 'TicketIcon',
-    href: 'https://bitgertswap.com/',
   },
   {
     label: 'BitgertPad',
@@ -34,14 +24,14 @@ const config: MenuEntry[] = [
         label: 'Presale Directory',
         href: '/presale',
       },
-      {
-        label: 'Airdrop',
-        href: '/create-airdrop',
-      },
-      {
-        label: 'Airdrop Directory',
-        href: '/airdrop',
-      },
+      // {
+      //   label: 'Airdrop',
+      //   href: '/create-airdrop',
+      // },
+      // {
+      //   label: 'Airdrop Directory',
+      //   href: '/airdrop',
+      // },
       {
         label: 'Lock Tokens',
         href: '/create-lock',

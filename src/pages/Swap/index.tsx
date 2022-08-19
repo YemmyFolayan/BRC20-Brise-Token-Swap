@@ -1,7 +1,7 @@
 import { CurrencyAmount, JSBI, Token, Trade } from '@evofinance9/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ArrowDown } from 'react-feather'
-import { CardBody, ArrowDownIcon, Button, IconButton, Text, Link } from '@evofinance9/uikit'
+import { CardBody, ArrowDownIcon, Button, IconButton, Text } from '@evofinance9/uikit'
 import styled, { ThemeContext } from 'styled-components'
 import AddressInputPanel from 'components/AddressInputPanel'
 import Card, { GreyCard } from 'components/Card'
@@ -38,11 +38,6 @@ import PageHeader from 'components/PageHeader'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Chart from 'components/Chart'
 import AppBody from '../AppBody'
-
-const StyledLink = styled(Link)`
-  display: inline;
-  color: ${({ theme }) => theme.colors.failure};
-`
 
 const CustomContainer = styled.div`
   display: flex;

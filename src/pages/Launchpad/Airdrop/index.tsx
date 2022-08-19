@@ -2,16 +2,27 @@
 import React, { useState, useEffect } from 'react'
 import swal from 'sweetalert'
 import { Button, CardBody, Input } from '@evofinance9/uikit'
+import { ethers } from 'ethers'
+
+import { BigNumber } from '@ethersproject/bignumber'
+import { TransactionResponse } from '@ethersproject/providers'
+
+import addAirdrop from './apicalls'
+
+import { useAirdropContract, useDateTimeContract } from 'hooks/useContract'
+import { getAirdropContract } from 'utils'
+
+import './style.css'
+import { AppBodyExtended } from 'pages/AppBody'
 
 import { useActiveWeb3React } from 'hooks'
 
 import Container from 'components/Container'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
 
-import { AppBodyExtended } from 'pages/AppBody'
-
 export default function Airdrop() {
   const { account, chainId, library } = useActiveWeb3React()
+  const airdropContract = useAirdropContract(true)
 
   const [txHash, setTxHash] = useState<string>('')
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
@@ -64,9 +75,86 @@ export default function Airdrop() {
     setFormData({ ...formData, [name]: value })
   }
 
+  const createAirdrop = async (formData) => {
+    if (!chainId || !library || !account) return
+    const airdrop = getAirdropContract(chainId, library, account)
+    const payload = [
+      token_address,
+    ]
+    console.log(airdrop)
+    const method: (...args: any) => Promise<TransactionResponse> = airdrop!.BitgertAirdrop
+    const args: Array<object | string[] | number> = [payload]
+
+    setAttemptingTxn(true)
+    await method(...args)
+      .then((response) => {
+        setAttemptingTxn(false)
+        console.log(response)
+        setTxHash(response.hash)
+      })
+      .catch((e) => {
+        setAttemptingTxn(false)
+        // we only care if the error is something _other_ than the user rejected the tx
+        if (e?.code !== 4001) {
+          console.error(e)
+          alert(e.message)
+        }
+      })
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    // handle api call here
+
+    if (
+      !token_address ||
+      !token_name ||
+      !token_decimal ||
+      !token_symbol ||
+      !logo_url ||
+      !website_url ||
+      !title ||
+      !twitter_url ||
+      !instagram_url ||
+      !telegram_url ||
+      !discord_url ||
+      !reddit_url ||
+      !github_url ||
+      !description
+    ) {
+      swal('Are you sure?', 'There are incomplete fields in your submission!', 'warning')
+      return
+    }
+
+    createAirdrop(formData)
+
+    addAirdrop(formData)
+      .then((data) => {
+        if (data.error) {
+          swal('Oops', 'Something went wrong!', 'error')
+        } else {
+          setFormData({
+            ...formData,
+            chain_id: '32520',
+            owner_address: '',
+            token_address: '',
+            token_name: '',
+            token_symbol: '',
+            token_decimal: '',
+            logo_url: '',
+            website_url: '',
+            twitter_url: '',
+            instagram_url: '',
+            telegram_url: '',
+            discord_url: '',
+            reddit_url: '',
+            github_url: '',
+            title: '',
+            description: '',
+          })
+          swal('Congratulations!', 'Airdrop is added!', 'success')
+        }
+      })
+      .catch((err) => console.log('Error in signup'))
   }
 
   return (

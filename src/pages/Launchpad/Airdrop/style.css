@@ -1,0 +1,16 @@
+.form__container {
+  background-color: #333;
+}
+
+.extended__btn {
+  padding: 0.6rem 3rem;
+}
+
+.extend__form__container__width {
+  min-width: 550px;
+}
+
+/* .lg__checkbox {
+  width: 30px;
+  height: 30px;
+} */

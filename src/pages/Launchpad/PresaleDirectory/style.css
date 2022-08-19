@@ -9,11 +9,15 @@
   max-height: 90px;
 }
 
+.links__logo img {
+  max-width: 55px;
+  max-height: 40px;
+}
+
 .presale__progress {
   height: 8px;
 }
 
-.presale__card{
-  background-color:  #2e2e2e !important;
+.presale__card {
+  background-color: #2e2e2e !important;
 }
-

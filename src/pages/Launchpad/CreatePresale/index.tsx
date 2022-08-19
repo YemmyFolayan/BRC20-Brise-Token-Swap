@@ -83,27 +83,27 @@ export default function CreatePresale() {
   const [formData, setFormData] = useState({
     chain_id: '32520',
     owner_address: '',
-    token_address: '0x9892fFB5Ec3Eaa1EE980B8c14976A71c8455374b',
-    token_name: 'BSC Token',
-    token_symbol: 'BSC',
-    token_decimal: '18',
-    tier1: '100',
-    tier2: '200',
-    tier3: '300',
-    soft_cap: '1000',
-    hard_cap: '2000',
-    min_buy: '10',
-    max_buy: '100',
+    token_address: '',
+    token_name: '',
+    token_symbol: '',
+    token_decimal: '',
+    tier1: '',
+    tier2: '',
+    tier3: '',
+    soft_cap: '',
+    hard_cap: '',
+    min_buy: '',
+    max_buy: '',
     router_rate: '',
     default_router_rate: '',
     listing_rate: '',
-    logo_link: 'demo',
-    website_link: 'demo',
-    github_link: 'demo',
-    twitter_link: 'demo',
-    reddit_link: 'demo',
-    telegram_link: 'demo',
-    project_dec: 'demo',
+    logo_link: '',
+    website_link: '',
+    github_link: '',
+    twitter_link: '',
+    reddit_link: '',
+    telegram_link: '',
+    project_dec: '',
     update_dec: '',
     token_level: '',
     start_time: new Date(),
@@ -153,6 +153,7 @@ export default function CreatePresale() {
     const presale = getPresaleContract(chainId, library, account)
 
     const {
+      owner_address,
       token_address,
       soft_cap,
       hard_cap,
@@ -298,7 +299,7 @@ export default function CreatePresale() {
 
     createPresale(formData)
 
-    addPresale(formData)
+    addPresale({ ...formData, owner_address: account })
       .then((data) => {
         if (data.error) {
           swal('Oops', 'Something went wrong!', 'error')

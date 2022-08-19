@@ -16,8 +16,12 @@ import Swap from './Swap'
 import Migration from './Migration'
 import Airdrop from './Launchpad/Airdrop'
 import Locker from './Launchpad/Locker'
+import LockDirectory from './Launchpad/LockDirectory'
 import CreatePresale from './Launchpad/CreatePresale'
 import PresaleDirectory from './Launchpad/PresaleDirectory'
+import PoolDetails from './Launchpad/PresaleDirectory/PoolDetails'
+import TokenDetails from './Launchpad/LockDirectory/TokenDetails'
+import LockDetails from './Launchpad/LockDirectory/LockDetails'
 import { RedirectPathToSwapOnly } from './Swap/redirects'
 import { EN, allLanguages } from '../constants/localisation/languageCodes'
 import { LanguageContext } from '../hooks/LanguageContext'
@@ -97,8 +101,12 @@ export default function App() {
                     <Route exact path="/dashboard" component={Dashboard} />
                     <Route exact strict path="/create-presale" component={CreatePresale} />
                     <Route exact strict path="/presale" component={PresaleDirectory} />
+                    <Route exact strict path="/presale/:saleId" component={PoolDetails} />
                     <Route exact strict path="/create-airdrop" component={Airdrop} />
                     <Route exact strict path="/create-lock" component={Locker} />
+                    <Route exact strict path="/lock" component={LockDirectory} />
+                    <Route exact strict path="/lock/:lockId" component={LockDetails} />
+                    <Route exact strict path="/locks/:tokenId" component={TokenDetails} />
                     <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
 
                     {/* Redirection: These old routes are still used in the code base */}

@@ -1,0 +1,21 @@
+.dot {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 50% !important;
+  }
+  
+  .lock__logo img {
+    max-width: 90px;
+    max-height: 90px;
+  }
+  
+  .lock__progress {
+    height: 8px;
+  }
+  
+  .lock__card{
+    background-color:  #2e2e2e !important;
+  }
+
+
+  

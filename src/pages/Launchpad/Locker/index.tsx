@@ -7,12 +7,26 @@ import { TextField, withStyles } from '@material-ui/core'
 import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
 import '@djthoms/pretty-checkbox'
 
+import { ethers } from 'ethers'
+
+import { BigNumber } from '@ethersproject/bignumber'
+import { TransactionResponse } from '@ethersproject/providers'
+
+import addBitgertLock from './apicalls'
+
+import { useBitgertLockContract, useDateTimeContract, useTokenContract } from 'hooks/useContract'
+import { getBitgertLockContract, getTokenContract } from 'utils'
+import getUnixTimestamp from 'utils/getUnixTimestamp'
+
+import './style.css'
+
 import { useActiveWeb3React } from 'hooks'
 
 import Container from 'components/Container'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
 
 import { AppBodyExtended } from 'pages/AppBody'
+import { LOCK_ADDRESS } from 'constants/abis/lock'
 
 const CssTextField = withStyles({
   root: {
@@ -44,9 +58,16 @@ const CssTextField = withStyles({
 export default function Locker() {
   const checkbox = useCheckboxState({ state: [] })
   const { account, chainId, library } = useActiveWeb3React()
+  const bitgertLockContract = useBitgertLockContract(true)
+  const dateTimeContract = useDateTimeContract()
 
+  const [currentSaleId, setCurrentSaleId] = useState(0)
+  const [tokenName, setTokenName] = useState<any>()
+  const [tokenSymbol, setTokenSymbol] = useState<any>()
+  const [tokenDecimal, setTokenDecimal] = useState(0)
   const [txHash, setTxHash] = useState<string>('')
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
+  const [showApprove, setShowApprove] = useState<boolean>(false)
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
 
   const [formData, setFormData] = useState({
@@ -56,7 +77,9 @@ export default function Locker() {
     token_name: '',
     token_symbol: '',
     token_decimal: '',
+    isLPToken: false,
     title: '',
+    amount: '',
     is_another: false,
     is_vesting: false,
     tge_percent: '',
@@ -64,6 +87,7 @@ export default function Locker() {
     release_percent: '',
     release_date: new Date(),
     tge_date: new Date(),
+    description: '',
   })
 
   // destructure
@@ -72,7 +96,9 @@ export default function Locker() {
     token_name,
     token_decimal,
     token_symbol,
+    isLPToken,
     title,
+    amount,
     owner_address,
     is_another,
     is_vesting,
@@ -81,7 +107,24 @@ export default function Locker() {
     release_percent,
     tge_date,
     release_date,
+    description,
   } = formData
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!library || !account) return
+      const tokenContract = getTokenContract(token_address, library, account)
+      const TName = await tokenContract?.callStatic.name()
+      setTokenName(TName)
+      const TSymbol = await tokenContract?.callStatic.symbol()
+      setTokenName(TSymbol)
+      const TDecimals = await tokenContract?.callStatic.decimals()
+      setTokenName(TDecimals)
+    }
+    if (account && token_address && library instanceof ethers.providers.Web3Provider) {
+      fetch()
+    }
+  }, [token_address, account, library])
 
   const handleDismissConfirmation = () => {
     setShowConfirm(false)
@@ -89,7 +132,7 @@ export default function Locker() {
   }
 
   const handleChange = (name) => (event) => {
-    if (name === 'is_another' || name === 'is_vesting') {
+    if (name === 'is_another' || name === 'is_vesting' || name === 'isLPToken') {
       const value = event.target.checked
       setFormData({ ...formData, [name]: value })
     } else {
@@ -102,9 +145,166 @@ export default function Locker() {
     setFormData({ ...formData, [name]: value })
   }
 
-  const handleSubmit = (e) => {
+  const createBitgertLock = async (formData) => {
+    if (!chainId || !library || !account) return
+    const bitgertLock = getBitgertLockContract(chainId, library, account)
+
+    if (!is_vesting) {
+      const payload_1 = [
+        owner_address ? owner_address : account,
+        token_address,
+        isLPToken,
+        amount,
+        await getUnixTimestamp(dateTimeContract, release_date),
+        description,
+      ]
+
+      const method: (...args: any) => Promise<TransactionResponse> = bitgertLock!.lock
+      const args: Array<string | number | boolean> = payload_1
+
+      setAttemptingTxn(true)
+      await method(...args)
+        .then((response) => {
+          setAttemptingTxn(false)
+          addBitgertLock({ ...formData, owner_address: owner_address ? owner_address : account })
+            .then((data) => {
+              setFormData({
+                ...formData,
+                chain_id: '32520',
+                owner_address: '',
+                token_address: '',
+                token_name: '',
+                token_symbol: '',
+                token_decimal: '',
+                isLPToken: false,
+                title: '',
+                amount: '',
+                is_another: false,
+                is_vesting: false,
+                tge_percent: '',
+                release_cycle: '',
+                release_percent: '',
+                release_date: new Date(),
+                tge_date: new Date(),
+                description: '',
+              })
+              if (data.error) {
+                swal('Oops', 'Something went wrong!', 'error')
+              }
+            })
+            .catch((err) => console.log('Error in signup'))
+          swal('Congratulationsq!', 'Bitgert Lock is added!', 'success')
+          setTxHash(response.hash)
+        })
+        .catch((e) => {
+          setAttemptingTxn(false)
+          // we only care if the error is something _other_ than the user rejected the tx
+          if (e?.code !== 4001) {
+            console.error(e)
+            alert(e.message)
+          }
+        })
+    } else {
+      const payload_2 = [
+        owner_address ? owner_address : account,
+        token_address,
+        isLPToken,
+        amount,
+        await getUnixTimestamp(dateTimeContract, tge_date),
+        tge_percent,
+        release_cycle,
+        release_percent,
+        description,
+      ]
+
+      const method: (...args: any) => Promise<TransactionResponse> = bitgertLock!.vestingLock
+      const args: Array<string | number | boolean> = payload_2
+
+      setAttemptingTxn(true)
+      await method(...args)
+        .then((response) => {
+          setAttemptingTxn(false)
+          addBitgertLock({ ...formData, owner_address: owner_address ? owner_address : account })
+            .then((data) => {
+              setFormData({
+                ...formData,
+                chain_id: '32520',
+                owner_address: '',
+                token_address: '',
+                token_name: '',
+                token_symbol: '',
+                token_decimal: '',
+                isLPToken: false,
+                title: '',
+                amount: '',
+                is_another: false,
+                is_vesting: false,
+                tge_percent: '',
+                release_cycle: '',
+                release_percent: '',
+                release_date: new Date(),
+                tge_date: new Date(),
+                description: '',
+              })
+              if (data.error) {
+                swal('Oops', 'Something went wrong!', 'error')
+              }
+            })
+            .catch((err) => console.log('Error in signup'))
+
+          swal('Congratulationss!', 'Bitgert Lock is added!', 'success')
+          setTxHash(response.hash)
+        })
+        .catch((e) => {
+          setAttemptingTxn(false)
+          // we only care if the error is something _other_ than the user rejected the tx
+          if (e?.code !== 4001) {
+            console.error(e)
+            alert(e.message)
+          }
+        })
+    }
+  }
+
+  const ApproveBitgertLock = async (formData) => {
+    if (!chainId || !library || !account) return
+    const tokenContract = getTokenContract(token_address, library, account)
+
+    const payload = [LOCK_ADDRESS, amount]
+
+    const method: (...args: any) => Promise<TransactionResponse> = tokenContract!.approve
+    const args: Array<string | string[] | number> = payload
+
+    setAttemptingTxn(true)
+    await method(...args)
+      .then((response) => {
+        setAttemptingTxn(false)
+        setTxHash(response.hash)
+      })
+      .catch((e) => {
+        setAttemptingTxn(false)
+        // we only care if the error is something _other_ than the user rejected the tx
+        if (e?.code !== 4001) {
+          console.error(e)
+          alert(e.message)
+        }
+      })
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // handle api call here
+
+    if (false) {
+      swal('Are you sure?', 'There are incomplete fields in your submission!', 'warning')
+      return
+    }
+
+    createBitgertLock(formData)
+  }
+
+  const handleAllowance = () => {
+    if (!account || !token_address) return
+    ApproveBitgertLock(formData)
   }
 
   return (
@@ -134,6 +334,21 @@ export default function Locker() {
                     onChange={handleChange('token_address')}
                   />
                 </div>
+
+                <div className="col-md-12 mb-3">
+                  <Checkbox
+                    checked={isLPToken}
+                    onChange={handleChange('isLPToken')}
+                    color="warning"
+                    bigger
+                    shape="curve"
+                    animation="jelly"
+                    icon={<i className="fas fa-check" />}
+                  >
+                    LP token ?
+                  </Checkbox>
+                </div>
+
                 <div className="col-md-12 mb-3">
                   <Checkbox
                     checked={is_another}
@@ -289,11 +504,36 @@ export default function Locker() {
                     </div>
                   </>
                 )}
+
+                <div className="col-md-12 mb-3">
+                  <Input
+                    placeholder="Amount"
+                    className="mt-3"
+                    scale="lg"
+                    value={amount}
+                    onChange={handleChange('amount')}
+                  />
+                </div>
+
+                <div className="col-md-12 mb-3">
+                  <Input
+                    placeholder="Description"
+                    className="mt-3"
+                    scale="lg"
+                    value={description}
+                    onChange={handleChange('description')}
+                  />
+                </div>
               </div>
             </CardBody>
 
             <div className="d-flex justify-content-center gap-3 mt-3">
-              <Button onClick={handleSubmit}>Submit</Button>
+              <Button className="mx-3" onClick={handleAllowance}>
+                Approve
+              </Button>
+              <Button className="mx-3" onClick={handleSubmit}>
+                Submit
+              </Button>
             </div>
           </div>
         </AppBodyExtended>

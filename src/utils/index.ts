@@ -1,4 +1,4 @@
-import { BigNumberish, ethers } from 'ethers'
+import { BigNumberish } from 'ethers'
 import { BigNumber as BN } from 'bignumber.js'
 import { Contract } from '@ethersproject/contracts'
 import { getAddress } from '@ethersproject/address'
@@ -8,6 +8,9 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@evofinance9/sdk'
 import { REWARD_ABI, REWARD_ADDRESS } from 'constants/abis/reward'
 import { PRESALE_ABI, PRESALE_ADDRESS } from 'constants/abis/presale'
+import { AIRDROP_ABI, AIRDROP_ADDRESS } from 'constants/abis/airdrop'
+import { LOCK_ABI, LOCK_ADDRESS } from 'constants/abis/lock'
+import ERC20_ABI from 'constants/abis/erc20.json'
 import { ROUTER_ABI, ROUTER_ADDRESS } from '../constants'
 import { TokenAddressMap } from '../state/lists/hooks'
 
@@ -22,7 +25,7 @@ export function isAddress(value: any): string | false {
 
 const BSCSCAN_PREFIXES: { [chainId in ChainId]: string } = {
   32520: '',
-  64668: 'testnet-explorer.'
+  64668: 'testnet-explorer.',
 }
 
 export function getBscScanLink(chainId: ChainId, data: string, type: 'transaction' | 'token' | 'address'): string {
@@ -67,7 +70,7 @@ export function calculateSlippageAmount(value: CurrencyAmount, slippage: number)
   }
   return [
     JSBI.divide(JSBI.multiply(value.raw, JSBI.BigInt(10000 - slippage)), JSBI.BigInt(10000)),
-    JSBI.divide(JSBI.multiply(value.raw, JSBI.BigInt(10000 + slippage)), JSBI.BigInt(10000))
+    JSBI.divide(JSBI.multiply(value.raw, JSBI.BigInt(10000 + slippage)), JSBI.BigInt(10000)),
   ]
 }
 
@@ -103,6 +106,18 @@ export function getPresaleContract(_: number, library: Web3Provider, account?: s
   return getContract(PRESALE_ADDRESS, PRESALE_ABI, library, account)
 }
 
+export function getAirdropContract(_: number, library: Web3Provider, account?: string): Contract {
+  return getContract(AIRDROP_ADDRESS, AIRDROP_ABI, library, account)
+}
+
+export function getBitgertLockContract(_: number, library: Web3Provider, account?: string): Contract {
+  return getContract(LOCK_ADDRESS, LOCK_ABI, library, account)
+}
+
+export function getTokenContract(tokenAddress: string, library: Web3Provider, account?: string): Contract {
+  return getContract(tokenAddress, ERC20_ABI, library, account)
+}
+
 export function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
@@ -113,5 +128,5 @@ export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currenc
 }
 
 export const bnDivideByDecimal = (a: BigNumberish) => {
-  return new BN(a.toString()).dividedBy(new BN(1E18))
+  return new BN(a.toString()).dividedBy(new BN(1e18))
 }

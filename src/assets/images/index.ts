@@ -10,3 +10,7 @@ export { default as DownArrow } from "./downArrow.svg"
 export { default as PlusIcon } from "./plus.png"
 export { default as WatchIcon } from "./watch.png"
 export { default as ShoppingIcon } from "./shopping.png"
+
+export { default as TelegramIcon } from "./telegram.png"
+export { default as TwitterIcon } from "./twitter.png"
+export { default as WWWIcon } from "./www.png"
