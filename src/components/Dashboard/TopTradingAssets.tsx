@@ -49,7 +49,6 @@ const TopTradingAssets = () => {
     <Container>
       <Column>
         <table className="text-white">
-          {console.log(data)}
           <thead>
             <TableRow>
               <TableHeader>#</TableHeader>
