@@ -52,6 +52,7 @@ export default function LockCard({ data }: LockCardProps) {
           {token_name} <br /> {token_symbol}{' '}
         </td>
         <td>{amount}</td>
+        <td>{amount}</td>
         <td>
           <Link to={`/locks/${token_address}`}>View</Link>
         </td>
