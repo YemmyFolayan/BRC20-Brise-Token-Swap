@@ -164,9 +164,11 @@ export default function Locker() {
 
       setAttemptingTxn(true)
       await method(...args)
-        .then((response) => {
+        .then(async (response:any) => {
+          const txReceipt = await response.wait();
+          const lockId = txReceipt.events[2].args.id.toNumber()
           setAttemptingTxn(false)
-          addBitgertLock({ ...formData, owner_address: owner_address ? owner_address : account })
+          addBitgertLock({ ...formData, owner_address: owner_address ? owner_address : account, lock_id: lockId })
             .then((data) => {
               setFormData({
                 ...formData,
@@ -193,7 +195,7 @@ export default function Locker() {
               }
             })
             .catch((err) => console.log('Error in signup'))
-          swal('Congratulationsq!', 'Bitgert Lock is added!', 'success')
+          swal('Congratulations!', 'Bitgert Lock is added!', 'success')
           setTxHash(response.hash)
         })
         .catch((e) => {
@@ -222,9 +224,11 @@ export default function Locker() {
 
       setAttemptingTxn(true)
       await method(...args)
-        .then((response) => {
+        .then(async (response:any) => {
+          const txReceipt = await response.wait();
+          const lockId = txReceipt.events[2].args.id.toNumber()
           setAttemptingTxn(false)
-          addBitgertLock({ ...formData, owner_address: owner_address ? owner_address : account })
+          addBitgertLock({ ...formData, owner_address: owner_address ? owner_address : account, lock_id: lockId })
             .then((data) => {
               setFormData({
                 ...formData,
@@ -252,7 +256,7 @@ export default function Locker() {
             })
             .catch((err) => console.log('Error in signup'))
 
-          swal('Congratulationss!', 'Bitgert Lock is added!', 'success')
+          swal('Congratulations!', 'Bitgert Lock is added!', 'success')
           setTxHash(response.hash)
         })
         .catch((e) => {

@@ -14,6 +14,7 @@ import '@djthoms/pretty-checkbox'
 import { ethers } from 'ethers'
 import CountDownTimer from '../CountDownTimer'
 import moment from 'moment'
+import { getBitgertLockContract } from 'utils'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
@@ -43,6 +44,11 @@ export default function LockDetails({
   const [lock, setLock] = useState<any>({})
   const [finalTime, setFinalTime] = useState<any>()
   const [currentTime, setCurrentTime] = useState<any>()
+  const [lockID, setLockID] = useState<any>()
+  const [owner, setOwner] = useState<any>()
+  const { account, chainId, library } = useActiveWeb3React()
+  const [txHash, setTxHash] = useState<string>('')
+  const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
 
   // fetch lock info
   useEffect(() => {
@@ -50,6 +56,8 @@ export default function LockDetails({
       getLockById(lockId)
         .then(async (response) => {
           setLock(response)
+          setLockID(response.lock_id)
+          setOwner(response.owner_address)
           const end_time = response.release_date !== null ? response.release_date : response.tge_date
           setCurrentTime(moment().format('X'))
           setFinalTime(moment(end_time).format('X'))
@@ -61,6 +69,38 @@ export default function LockDetails({
     }
     fetch()
   }, [lockId])
+
+  const UnlockBitgertLock = async () => {
+    if (!chainId || !library || !account) return
+    const bitgertLock = getBitgertLockContract(chainId, library, account)
+
+    const payload = [
+      parseInt(lockID)
+    ]
+
+    const method: (...args: any) => Promise<TransactionResponse> = bitgertLock!.unlock
+    const args: Array<string | number | boolean> = payload
+
+    setAttemptingTxn(true)
+    await method(...args)
+      .then((response) => {
+        setAttemptingTxn(false)
+        setTxHash(response.hash)
+      })
+      .catch((e) => {
+        setAttemptingTxn(false)
+        // we only care if the error is something _other_ than the user rejected the tx
+        if (e?.code !== 4001) {
+          console.error(e)
+          alert(e.message)
+        }
+      })
+  }
+
+  const handleUnlock = () => {
+    if (!account || !lockId) return
+    UnlockBitgertLock()
+  }
 
   return (
     <div>
@@ -121,14 +161,18 @@ export default function LockDetails({
               <td>Owner </td>
               <td> {lock.owner_address} </td>
             </tr>
+            {!lock.is_vesting && 
             <tr className="d-flex justify-content-between">
-              <td> Lock Date </td>
+              <td> Unlock Date </td>
               <td> {moment(lock.release_date).format('dddd, MMMM Do YYYY, h:mm:ss a')} </td>
             </tr>
+            }
+            {lock.is_vesting && 
             <tr className="d-flex justify-content-between">
               <td>TGE Date </td>
               <td>{moment(lock.tge_date).format('dddd, MMMM Do YYYY, h:mm:ss a')} </td>
             </tr>
+            }
             <tr className="d-flex justify-content-between">
               <td>TGE Percent </td>
               <td>{lock.tge_percent} </td>
@@ -145,10 +189,17 @@ export default function LockDetails({
               <td> Unlocked Amount </td>
               <td> {lock.amount !== null ? 0 : lock.amount} </td>
             </tr>
-            {/* <tr className='d-flex justify-content-between'>
-                            <td> Vesting Info </td>
-                            <td> Vesting Info </td>
-                        </tr> */}
+            { owner === account &&
+            <tr className='d-flex justify-content-center'>
+                <td> 
+                <div className="d-flex justify-content-center gap-3 mt-3">
+                  <Button className="mx-3" onClick={handleUnlock}>
+                    Unlock
+                  </Button>
+                  </div>
+                </td>
+            </tr>
+            }
           </tbody>
         </Table>
       </div>
