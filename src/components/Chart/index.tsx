@@ -5,6 +5,13 @@ import { createChart, ColorType } from 'lightweight-charts'
 
 import Container from 'components/Container'
 
+const ContainerExtended = styled(Container)`
+  padding: 0;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`
+
 const BodyWrapper = styled(Card)`
   width: 100%;
   flex: 2;
@@ -31,12 +38,12 @@ export default function Chart() {
       height: 400,
       grid: {
         vertLines: {
-          color: "rgba(42, 46, 57, 0)"
+          color: 'rgba(42, 46, 57, 0)',
         },
         horzLines: {
-          color: "rgba(42, 46, 57, 0.6)"
-        }
-      }
+          color: 'rgba(42, 46, 57, 0.6)',
+        },
+      },
     })
 
     const candlestickSeries = firstChart.addCandlestickSeries()
@@ -55,13 +62,13 @@ export default function Chart() {
   }, [])
 
   return (
-    <Container style={{ padding: '0' }}>
+    <ContainerExtended>
       <BodyWrapper>
         <CardBody>
           <StyledHeading>Brise/Evo</StyledHeading>
           <ChartContainerDiv id="chartContainer" />
         </CardBody>
       </BodyWrapper>
-    </Container>
+    </ContainerExtended>
   )
 }
