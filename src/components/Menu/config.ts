@@ -2,8 +2,13 @@ import { MenuEntry } from '@evofinance9/uikit'
 
 const config: MenuEntry[] = [
   {
+    label: 'Home',
+    icon: 'HomeIcon',
+    href: '/',
+  },
+  {
     label: 'Dashboard',
-    icon: 'TicketIcon',
+    icon: 'IfoIcon',
     href: '/dashboard',
   },
   {
@@ -12,8 +17,13 @@ const config: MenuEntry[] = [
     href: '/swap',
   },
   {
+    label: 'Wallet',
+    icon: 'HamburgerIcon',
+    href: '/wallet',
+  },
+  {
     label: 'BitgertPad',
-    icon: 'IfoIcon',
+    icon: 'MoreIcon',
     initialOpenState: false,
     items: [
       {

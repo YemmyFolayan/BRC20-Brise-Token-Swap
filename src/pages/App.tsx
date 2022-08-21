@@ -13,6 +13,7 @@ import RemoveLiquidity from './RemoveLiquidity'
 import Reward from './Reward'
 import Dashboard from './Dashboard'
 import Swap from './Swap'
+import Wallet from './Wallet'
 import Migration from './Migration'
 import Airdrop from './Launchpad/Airdrop'
 import Locker from './Launchpad/Locker'
@@ -99,6 +100,7 @@ export default function App() {
                     <Route exact path="/add" component={AddLiquidity} />
                     <Route exact path="/migrate" component={Migration} />
                     <Route exact path="/dashboard" component={Dashboard} />
+                    <Route exact path="/wallet" component={Wallet} />
                     <Route exact strict path="/create-presale" component={CreatePresale} />
                     <Route exact strict path="/presale" component={PresaleDirectory} />
                     <Route exact strict path="/presale/:saleId" component={PoolDetails} />

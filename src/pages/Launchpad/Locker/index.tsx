@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import swal from 'sweetalert'
-import { Button, CardBody, Input } from '@evofinance9/uikit'
+import { Button, CardHeader, CardBody, Input } from '@evofinance9/uikit'
 import { DateTimePicker } from '@material-ui/pickers'
 import { TextField, withStyles } from '@material-ui/core'
 import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
@@ -315,6 +315,7 @@ export default function Locker() {
     <>
       <Container>
         <AppBodyExtended>
+        <CardHeader>Lock Your Token</CardHeader>
           {txHash && (
             <TransactionConfirmationModal
               isOpen={true}

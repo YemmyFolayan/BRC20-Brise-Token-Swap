@@ -6,7 +6,7 @@ import Stepper from 'react-stepper-horizontal'
 import { ethers } from 'ethers'
 
 import { BigNumber } from '@ethersproject/bignumber'
-import { Button } from '@evofinance9/uikit'
+import { Button, CardHeader, CardBody } from '@evofinance9/uikit'
 import { TransactionResponse } from '@ethersproject/providers'
 import Container from 'components/Container'
 
@@ -358,6 +358,9 @@ export default function CreatePresale() {
     <>
       <Container>
         <AppBodyExtended>
+          <CardHeader>Create Presale</CardHeader>
+          <CardBody>
+
           {txHash && (
             <TransactionConfirmationModal
               isOpen={true}
@@ -399,6 +402,8 @@ export default function CreatePresale() {
               )}
             </div>
           </div>
+          </CardBody>
+
         </AppBodyExtended>
       </Container>
       <div className="mt-5"> </div>

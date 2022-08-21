@@ -24,7 +24,7 @@ const Header = () => {
 					</Nav>
 					<Form className="d-flex" onSubmit={handleSubmit}>
 						<Link to="/swap">
-							<button className="btn" type="button">Swap</button>
+							<button className="btn" type="button">Trade</button>
 						</Link>
 					</Form>
 				</Navbar.Collapse>
