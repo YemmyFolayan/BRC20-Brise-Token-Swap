@@ -19,6 +19,12 @@ const ContainerExtended = styled(Container)`
   grid-column-gap: 1rem;
   grid-template-columns: 1fr 3fr;
   grid-auto-rows: 1fr;
+  ${({ theme }) => theme.mediaQueries.xs} {
+    grid-template-columns: 1fr;
+  }
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+  }
 `
 
 const Column = styled.div`

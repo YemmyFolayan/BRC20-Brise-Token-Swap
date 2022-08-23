@@ -20,6 +20,9 @@ import { GRAPH_ENDPOINT } from './backend'
 import 'inter-ui'
 import './i18n'
 
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+
 if ('ethereum' in window) {
   (window.ethereum as any).autoRefreshOnNetworkChange = false
 }
