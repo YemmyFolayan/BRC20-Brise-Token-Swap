@@ -30,7 +30,6 @@ import { TranslationsContext } from '../hooks/TranslationsContext'
 
 import Menu from '../components/Menu'
 
-
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -93,13 +92,13 @@ export default function App() {
                 <Popups />
                 <Web3ReactManager>
                   <>
+                    <Route exact path="/" component={Dashboard} />
                     <Route exact strict path="/swap" component={Swap} />
                     <Route exact strict path="/find" component={PoolFinder} />
                     <Route exact strict path="/pool" component={Pool} />
                     <Route exact strict path="/reward" component={Reward} />
                     <Route exact path="/add" component={AddLiquidity} />
                     <Route exact path="/migrate" component={Migration} />
-                    <Route exact path="/dashboard" component={Dashboard} />
                     <Route exact path="/wallet" component={Wallet} />
                     <Route exact strict path="/create-presale" component={CreatePresale} />
                     <Route exact strict path="/presale" component={PresaleDirectory} />

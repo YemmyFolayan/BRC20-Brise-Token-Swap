@@ -39,7 +39,6 @@ ReactDOM.render(
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <HashRouter>
           <Switch>
-            <Route exact strict path="/" component={Home} />
             <Route exact strict path="/advertise" component={Advertise} />
             <Route exact strict path="/documentation" component={Documentation} />
             <Providers>

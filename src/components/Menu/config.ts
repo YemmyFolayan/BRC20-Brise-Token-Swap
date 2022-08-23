@@ -7,11 +7,6 @@ const config: MenuEntry[] = [
     href: '/',
   },
   {
-    label: 'Dashboard',
-    icon: 'IfoIcon',
-    href: '/dashboard',
-  },
-  {
     label: 'Trade',
     icon: 'TradeIcon',
     href: '/swap',
