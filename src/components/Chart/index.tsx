@@ -7,9 +7,7 @@ import Container from 'components/Container'
 
 const ContainerExtended = styled(Container)`
   padding: 0;
-  @media (max-width: 768px) {
-    display: none;
-  }
+  
 `
 
 const BodyWrapper = styled(Card)`

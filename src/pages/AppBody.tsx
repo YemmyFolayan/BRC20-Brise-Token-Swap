@@ -9,6 +9,9 @@ export const BodyWrapper = styled(Card)`
   height: 100%;
   width: 100%;
   z-index: 5;
+  @media (max-width: 768px) {
+    min-width: 0;
+  }
 `
 
 export const BodyWrapperExtended = styled(Card)`

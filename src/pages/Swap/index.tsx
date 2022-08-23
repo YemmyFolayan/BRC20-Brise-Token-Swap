@@ -44,10 +44,12 @@ const CustomContainer = styled.div`
   width: 100%;
   justify-content: space-between;
   gap: 2rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `
 
 const Col = styled.div`
-
 `
 
 const Swap = () => {
