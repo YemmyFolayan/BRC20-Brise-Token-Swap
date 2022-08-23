@@ -1,4 +1,5 @@
 import { Currency, ETHER, Token } from '@evofinance9/sdk'
+import { SWAP_API } from 'backend'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import useHttpLocations from '../../hooks/useHttpLocations'
@@ -46,7 +47,13 @@ export default function CurrencyLogo({
   }, [currency, uriLocations])
 
   if (currency === ETHER) {
-    return <StyledBnbLogo src="https://evo-server.in/images/0x8fff93e810a2edaafc326edee51071da9d398e83.png" size={size} style={style} />
+    return (
+      <StyledBnbLogo
+        src={`${SWAP_API}/images/0x8fff93e810a2edaafc326edee51071da9d398e83.png`}
+        size={size}
+        style={style}
+      />
+    )
   }
 
   return (currency as any)?.symbol ? (

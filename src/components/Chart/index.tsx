@@ -1,13 +1,29 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import moment from 'moment'
 import styled from 'styled-components'
+import { SWAP_API } from 'backend'
 import { CardBody, Card } from '@evofinance9/uikit'
+import { useQuery, gql } from '@apollo/client'
 import { createChart, ColorType } from 'lightweight-charts'
 
 import Container from 'components/Container'
+import Loader from 'components/Loader'
+
+import {
+  ChartContainerDiv,
+  StyledHeading,
+  TokenLogo,
+  HeadingContainer,
+  TokenLogoContainer,
+  PriceHeading,
+  PriceSubHeading,
+  PriceHeadingContainer,
+  DateText,
+  LoaderContainer,
+} from './styleds'
 
 const ContainerExtended = styled(Container)`
   padding: 0;
-  
 `
 
 const BodyWrapper = styled(Card)`
@@ -15,17 +31,44 @@ const BodyWrapper = styled(Card)`
   flex: 2;
 `
 
-const ChartContainerDiv = styled.div`
-  border-radius: 20px;
-`
-
-const StyledHeading = styled.h1`
-  text-transform: uppercase;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
+const PAIR_QUERY = gql`
+  {
+    pair(id: "0x77575200f7a35072e0c5e691b32b26286d43a973") {
+      id
+      token0 {
+        id
+        symbol
+      }
+      token1 {
+        id
+        symbol
+      }
+      token0Price
+      token1Price
+      totalSupply
+      createdAtTimestamp
+    }
+  }
 `
 
 export default function Chart() {
+  const { data: graphData, loading } = useQuery(PAIR_QUERY)
+  const [data, setData] = useState<{
+    id: string
+    token0: {
+      id: string
+      symbol: string
+    }
+    token1: {
+      id: string
+      symbol: string
+    }
+    totalSupply: string
+    token0Price: string
+    token1Price: string
+    createdAtTimestamp: string
+  } | null>(null)
+
   useEffect(() => {
     const firstChart = createChart('chartContainer', {
       layout: {
@@ -59,11 +102,47 @@ export default function Chart() {
     ])
   }, [])
 
+  useEffect(() => {
+    if (graphData) {
+      setData(graphData?.pair)
+    }
+  }, [graphData])
+
   return (
     <ContainerExtended>
       <BodyWrapper>
         <CardBody>
-          <StyledHeading>Brise/Evo</StyledHeading>
+          <div>
+            {loading && (
+              <LoaderContainer>
+                <Loader size="25px" />
+              </LoaderContainer>
+            )}
+            {!loading && data && (
+              <>
+                <HeadingContainer>
+                  <TokenLogoContainer>
+                    <TokenLogo src={`${SWAP_API}/images/${data.token1.id}.png`} alt={data.token1.symbol} />
+                    <TokenLogo src={`${SWAP_API}/images/${data.token0.id}.png`} alt={data.token0.symbol} />
+                  </TokenLogoContainer>
+                  <StyledHeading>
+                    {data.token1.symbol}/{data.token0.symbol}
+                  </StyledHeading>
+                </HeadingContainer>
+
+                <PriceHeadingContainer>
+                  <PriceHeading>{parseFloat(data.token1Price).toFixed(4)}</PriceHeading>
+                  <PriceSubHeading>
+                    {data.token1.symbol}/{data.token0.symbol}
+                  </PriceSubHeading>
+                </PriceHeadingContainer>
+
+                <HeadingContainer>
+                  <DateText>{moment.unix(parseInt(data.createdAtTimestamp)).format('MMM DD, YYYY, h:mm A')}</DateText>
+                </HeadingContainer>
+              </>
+            )}
+          </div>
           <ChartContainerDiv id="chartContainer" />
         </CardBody>
       </BodyWrapper>

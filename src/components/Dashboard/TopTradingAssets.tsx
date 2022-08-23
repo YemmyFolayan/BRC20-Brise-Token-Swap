@@ -30,6 +30,7 @@ const TableRow = styled.tr`
 const TableRowItem = styled.td`
   padding: 0.7rem;
 `
+
 const ASSETS_QUERY = gql`
   {
     tokens(orderBy: tradeVolume, orderDirection: desc) {

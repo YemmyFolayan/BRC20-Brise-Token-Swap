@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Table, FormControl } from 'react-bootstrap'
 
+import { SWAP_API } from 'backend'
+
 import getTokens from './apicalls'
 
 export default function WatchlistTables() {
@@ -31,17 +33,17 @@ export default function WatchlistTables() {
   const getLogoURL = (token) => {
     switch (token.id) {
       case 'OMNIA2':
-        return `https://evo-server.in/images/0x5d4685c2C75581C67b9D6292A065a767bC214681.png`
+        return `${SWAP_API}/images/0x5d4685c2C75581C67b9D6292A065a767bC214681.png`
       case 'ELTG':
-        return `https://evo-server.in/images/0xb860eCD8400600c13342a751408737235E177077.png`
+        return `${SWAP_API}/images/0xb860eCD8400600c13342a751408737235E177077.png`
       case 'WBRISE':
-        return `https://evo-server.in/images/0x8fff93e810a2edaafc326edee51071da9d398e83.png`
+        return `${SWAP_API}/images/0x8fff93e810a2edaafc326edee51071da9d398e83.png`
       case 'BROGE2':
-        return `https://evo-server.in/images/0x41c5ae56681Fb19334eCF7d914919805DaE2Ec8f.png`
+        return `${SWAP_API}/images/0x41c5ae56681Fb19334eCF7d914919805DaE2Ec8f.png`
       case 'VEF2':
-        return `https://evo-server.in/images/0xd6447d2fa919811c41a064bdbdab1e281f8de9b2.jpeg`
+        return `${SWAP_API}/images/0xd6447d2fa919811c41a064bdbdab1e281f8de9b2.png`
       case 'BPAD4':
-        return `https://evo-server.in/images/0x71946a5C9dA7C95ee804a9BE561EC15A3F286A7D.jpeg`
+        return `${SWAP_API}/images/0x71946a5C9dA7C95ee804a9BE561EC15A3F286A7D.png`
 
       default:
         return token.logo_url
@@ -59,7 +61,7 @@ export default function WatchlistTables() {
 
   return (
     <div className="table_section">
-      <Container >
+      <Container>
         <div className="d-flex justify-content-between my-3">
           <h3>
             <span role="img" aria-label="active" className="emoji">
@@ -84,7 +86,7 @@ export default function WatchlistTables() {
           <tbody>
             {searchResult.length === 0 &&
               tokens.map((token, idx) => {
-                if (!["OMNIA2", "BDSL"].includes(token!.id)) {
+                if (!['OMNIA2', 'BDSL'].includes(token!.id)) {
                   return (
                     <tr key={token.id}>
                       <td style={{ width: '5%' }}>
@@ -115,8 +117,7 @@ export default function WatchlistTables() {
               })}
 
             {searchResult.map((token, idx) => {
-              
-              if (!["OMNIA2", "BDSL"].includes(token!.id)) {
+              if (!['OMNIA2', 'BDSL'].includes(token!.id)) {
                 return (
                   <tr key={token.id}>
                     <td style={{ width: '5%' }}>

@@ -10,6 +10,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../sass/_main.scss'
 import '../../sass/_responsive.scss'
 
+import { SWAP_API } from 'backend'
+
 import Footer from '../../components/Footer'
 import WatchlistTables from '../../components/WatchlistTables'
 import { BannerImg } from '../../assets/images'
@@ -23,13 +25,13 @@ const banners: any[] = [
     id: 0,
     label: 'Centcex Banner',
     hrefURL: `https://centcex.finance/`,
-    imageURL: `https://evo-server.in/images/banner-0.jpg`,
+    imageURL: `${SWAP_API}/images/banner-0.jpg`,
   },
   {
     id: 1,
     label: 'Evo Banner',
     hrefURL: `https://tttttt.me/evofinances`,
-    imageURL: `https://evo-server.in/images/banner-1.jpg`,
+    imageURL: `${SWAP_API}/images/banner-1.jpg`,
   },
 ]
 
