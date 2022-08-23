@@ -23,7 +23,12 @@ const ContainerExtended = styled(Container)`
     grid-template-columns: 1fr;
   }
 
+  ${({ theme }) => theme.mediaQueries.md} {
+    grid-template-columns: 1fr 3fr;
+  }
+
   ${({ theme }) => theme.mediaQueries.lg} {
+    grid-template-columns: 1fr 3fr;
   }
 `
 
