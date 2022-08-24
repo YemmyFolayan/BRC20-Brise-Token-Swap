@@ -35,6 +35,9 @@ const AppWrapper = styled.div`
   flex-flow: column;
   align-items: flex-start;
   overflow-x: hidden;
+  a {
+    text-decoration: none !important;
+  }
 `
 
 const BodyWrapper = styled.div`

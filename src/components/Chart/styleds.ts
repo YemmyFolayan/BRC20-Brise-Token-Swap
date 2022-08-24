@@ -57,4 +57,25 @@ export const LoaderContainer = styled.div`
   margin: 1rem 0;
 `
 
+export const InputWrapper = styled.div`
+  margin: 1rem 0;
+`
+
+export const SearchResContainer = styled.div`
+  position: absolute;
+  z-index: 999;
+  background-color: #08060b;
+  border-radius: 16px;
+`
+
+export const SearchResItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0.7rem;
+
+`
+
+
 export default {}
