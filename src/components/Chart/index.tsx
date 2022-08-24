@@ -5,7 +5,7 @@ import { SWAP_API } from 'backend'
 import { CardBody, Card, Input } from '@evofinance9/uikit'
 import { useQuery, gql } from '@apollo/client'
 import { createChart, ColorType } from 'lightweight-charts'
-
+import { isAddress } from 'ethers/lib/utils'
 import Container from 'components/Container'
 import Loader from 'components/Loader'
 
@@ -186,9 +186,13 @@ export default function Chart() {
                   setSearch(e.target.value.toUpperCase())
                   setShow(true)
                   refetch({
-                    where: {
-                      symbol: e.target.value.toUpperCase(),
-                    },
+                    where: isAddress(e.target.value)
+                      ? {
+                          id: e.target.value,
+                        }
+                      : {
+                          symbol: e.target.value.toUpperCase(),
+                        },
                   })
                 }}
               />
