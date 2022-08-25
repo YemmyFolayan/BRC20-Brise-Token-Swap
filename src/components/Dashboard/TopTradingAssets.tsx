@@ -36,7 +36,7 @@ const ASSETS_QUERY = gql`
     tokens(
       orderBy: tradeVolume
       orderDirection: desc
-      where: { id_not: 0x0eb9036cbe0f052386f36170c6b07ef0a0e3f710 }
+      where: { id_not: "0x0eb9036cbe0f052386f36170c6b07ef0a0e3f710" }
     ) {
       id
       name

@@ -212,6 +212,7 @@ export default function CreatePresale() {
 
     console.log(currentFee.toString())
     console.log(value)
+    console.log(args)
     console.log(value.toString())
 
     setAttemptingTxn(true)
@@ -222,6 +223,60 @@ export default function CreatePresale() {
         setAttemptingTxn(false)
         console.log(response)
         setTxHash(response.hash)
+
+        addPresale({ ...formData, owner_address: account, sale_id: currentPresaleId.toNumber() })
+          .then((data) => {
+            if (data.error) {
+              swal('Oops', 'Something went wrong!', 'error')
+            } else {
+              setFormData({
+                ...formData,
+                chain_id: '32520',
+                owner_address: '',
+                token_address: '',
+                token_name: '',
+                token_symbol: '',
+                token_decimal: '',
+                tier1: '',
+                tier2: '',
+                tier3: '',
+                soft_cap: '',
+                hard_cap: '',
+                min_buy: '',
+                max_buy: '',
+                router_rate: '',
+                default_router_rate: '',
+                listing_rate: '',
+                logo_link: '',
+                website_link: '',
+                github_link: '',
+                twitter_link: '',
+                reddit_link: '',
+                telegram_link: '',
+                project_dec: '',
+                update_dec: '',
+                token_level: '',
+                start_time: new Date(),
+                end_time: new Date(),
+                tier1_time: new Date(),
+                tier2_time: new Date(),
+                lock_time: new Date(),
+                liquidity: '',
+                contribution: '',
+                liquidity_lock: false,
+                certik_audit: false,
+                doxxed_team: false,
+                utility: false,
+                kyc: false,
+                other_token: '',
+                other_symbol: '',
+                is_other: false,
+                is_brise: false,
+              })
+              swal('Congratulations!', 'Presale is added!', 'success')
+            }
+          })
+          .catch((err) => console.log('Error in signup'))
       })
       .catch((e) => {
         setAttemptingTxn(false)
@@ -302,60 +357,6 @@ export default function CreatePresale() {
     }
 
     createPresale(formData)
-
-    addPresale({ ...formData, owner_address: account })
-      .then((data) => {
-        if (data.error) {
-          swal('Oops', 'Something went wrong!', 'error')
-        } else {
-          setFormData({
-            ...formData,
-            chain_id: '32520',
-            owner_address: '',
-            token_address: '',
-            token_name: '',
-            token_symbol: '',
-            token_decimal: '',
-            tier1: '',
-            tier2: '',
-            tier3: '',
-            soft_cap: '',
-            hard_cap: '',
-            min_buy: '',
-            max_buy: '',
-            router_rate: '',
-            default_router_rate: '',
-            listing_rate: '',
-            logo_link: '',
-            website_link: '',
-            github_link: '',
-            twitter_link: '',
-            reddit_link: '',
-            telegram_link: '',
-            project_dec: '',
-            update_dec: '',
-            token_level: '',
-            start_time: new Date(),
-            end_time: new Date(),
-            tier1_time: new Date(),
-            tier2_time: new Date(),
-            lock_time: new Date(),
-            liquidity: '',
-            contribution: '',
-            liquidity_lock: false,
-            certik_audit: false,
-            doxxed_team: false,
-            utility: false,
-            kyc: false,
-            other_token: '',
-            other_symbol: '',
-            is_other: false,
-            is_brise: false,
-          })
-          swal('Congratulations!', 'Presale is added!', 'success')
-        }
-      })
-      .catch((err) => console.log('Error in signup'))
   }
 
   return (

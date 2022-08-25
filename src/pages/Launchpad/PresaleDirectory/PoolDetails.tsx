@@ -54,6 +54,7 @@ export default function PoolDetails({
   const [balance, setBalance] = useState(0)
   const [totalSupply, setTotalSupply] = useState(0)
   const [finalTime, setFinalTime] = useState<any>()
+  const [isDeposited, setIsDeposited] = useState<boolean>(false)
   const [currentTime, setCurrentTime] = useState<any>()
   const [minContributeRate, setMinContributeRate] = useState<any>()
   const [maxContributeRate, setMaxContributeRate] = useState<any>()
@@ -98,7 +99,9 @@ export default function PoolDetails({
           setUserContributionToken(userToken.toString())
           const statusOfPresale = await presale?.callStatic.presaleStatus(BigInt(saleId).toString())
           setPresaleStatus(statusOfPresale)
-          // get token details 
+          const isDepositedRes = await presale?.callStatic.isDeposited(BigInt(saleId).toString())
+          setIsDeposited(isDepositedRes)
+          // get token details
           const CurrentToken = getTokenContract(response.token_address, library, account)
           const TSupply = await CurrentToken?.callStatic.totalSupply()
           setTotalSupply(TSupply.toString())
@@ -174,6 +177,29 @@ export default function PoolDetails({
 
     const method: (...args: any) => Promise<TransactionResponse> = presale!.emergencyWithdraw
     const args: string[] = payload
+
+    setAttemptingTxn(true)
+    await method(...args)
+      .then((response) => {
+        setAttemptingTxn(false)
+        setTxHash(response.hash)
+      })
+      .catch((e) => {
+        setAttemptingTxn(false)
+        // we only care if the error is something _other_ than the user rejected the tx
+        if (e?.code !== 4001) {
+          console.error(e)
+          alert(e.message)
+        }
+      })
+  }
+
+  const depositeToken = async () => {
+    if (!chainId || !library || !account) return
+    const presale = getPresaleContract(chainId, library, account)
+
+    const method: (...args: any) => Promise<TransactionResponse> = presale!.depositToken
+    const args: string[] = [saleId]
 
     setAttemptingTxn(true)
     await method(...args)
@@ -394,21 +420,26 @@ export default function PoolDetails({
                     </div>
                   </Link>
                 </div>
-                <div className=" d-flex justify-content-center ml-5 my-3">
-                  <Input
-                    placeholder="Amount"
-                    className=" d-flex justify-content-center mt-3 text-align-center"
-                    scale="lg"
-                    value={amount}
-                    onChange={handleChange('amount')}
-                  />
-                  <button onClick={fetchBalanceFromAccount}> Max </button>
-                </div>
-                <div className=" d-flex justify-content-center ml-5 mb-4">
-                  <Button scale="md" variant="secondary" onClick={handleContribute}>
-                    Contribute
-                  </Button>
-                </div>
+                {presale.owner_address !== account && (
+                  <>
+                    <div className=" d-flex justify-content-center align-items-center  ml-5 my-3">
+                      <Input
+                        placeholder="Amount"
+                        className=" d-flex justify-content-center text-align-center"
+                        scale="lg"
+                        value={amount}
+                        onChange={handleChange('amount')}
+                      />
+                      <Button onClick={fetchBalanceFromAccount} scale="md" variant="text"> Max </Button>
+                    </div>
+                    <div className=" d-flex justify-content-center ml-5 mb-4">
+                      <Button scale="md" variant="secondary" onClick={handleContribute}>
+                        Contribute
+                      </Button>
+                    </div>
+                  </>
+                )}
+
                 <div className="d-flex justify-content-between ml-5 my-4">
                   <div>
                     <h1 className=" my-3">1 BRISE :</h1>
@@ -426,14 +457,24 @@ export default function PoolDetails({
                   </div>
                 </div>
                 <div>
-                  <div className=" d-flex justify-content-center ml-5 my-4">
-                    <Button scale="md" variant="secondary" onClick={handleWithdraw}>
-                      Withdraw
-                    </Button>
-                  </div>
+                  {presale.owner_address !== account && (
+                    <div className=" d-flex justify-content-center ml-5 my-4">
+                      <Button scale="md" variant="secondary" onClick={handleWithdraw}>
+                        Withdraw
+                      </Button>
+                    </div>
+                  )}
+                  {presale.owner_address === account && !isDeposited && (
+                    <div className=" d-flex justify-content-center ml-5 my-4">
+                     <Button scale="md" variant="secondary" onClick={depositeToken}>
+                        Deposite
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
+
             {end_time <= current_time && (
               <div className="">
                 <div className=" d-flex justify-content-center mt-4 mb-2">
