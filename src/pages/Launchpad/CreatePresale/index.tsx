@@ -1,7 +1,6 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import swal from 'sweetalert'
-import { BigNumber as BN } from 'bignumber.js'
 import Stepper from 'react-stepper-horizontal'
 import { ethers } from 'ethers'
 
@@ -134,6 +133,11 @@ export default function CreatePresale() {
       const value = event.target.value
       setFormData({ ...formData, [name]: value })
     }
+  }
+
+  const handleChangeWithoutEvent = (obj: { token_name: string; token_symbol: string; token_decimal: string }) => {
+    console.log(obj)
+    setFormData({ ...formData, ...obj })
   }
 
   const handleDismissConfirmation = () => {
@@ -360,50 +364,54 @@ export default function CreatePresale() {
         <AppBodyExtended>
           <CardHeader>Create Presale</CardHeader>
           <CardBody>
-
-          {txHash && (
-            <TransactionConfirmationModal
-              isOpen={true}
-              onDismiss={handleDismissConfirmation}
-              attemptingTxn={false}
-              hash={txHash}
-              content={() => <></>}
-              pendingText={''}
+            {txHash && (
+              <TransactionConfirmationModal
+                isOpen={true}
+                onDismiss={handleDismissConfirmation}
+                attemptingTxn={false}
+                hash={txHash}
+                content={() => <></>}
+                pendingText={''}
+              />
+            )}
+            <Stepper
+              steps={steps}
+              activeStep={currentStep}
+              completeTitleColor="#fff"
+              activeTitleColor="#fff"
+              completeColor="#F9D849"
+              activeColor="#F9D849"
+              completeBarColor="#F9D849"
             />
-          )}
-          <Stepper
-            steps={steps}
-            activeStep={currentStep}
-            completeTitleColor="#fff"
-            activeTitleColor="#fff"
-            completeColor="#F9D849"
-            activeColor="#F9D849"
-            completeBarColor="#F9D849"
-          />
 
-          <div className=" text-white mb-5  ">
-            <form>
-              {currentStep === 0 && <TokenInfo data={formData} handleChange={handleChange} />}
-              {currentStep === 1 && <PresaleRate data={formData} handleChange={handleChange} />}
-              {currentStep === 2 && <SwapInfo data={formData} handleChange={handleChange} />}
-              {currentStep === 3 && <AdditionalInfo data={formData} handleChange={handleChange} />}
-              {currentStep === 4 && <Timing data={formData} handleChange={handleDateChange} />}
-            </form>
+            <div className=" text-white mb-5  ">
+              <form>
+                {currentStep === 0 && (
+                  <TokenInfo
+                    data={formData}
+                    handleChange={handleChange}
+                    handleChangeWithoutEvent={handleChangeWithoutEvent}
+                  />
+                )}
+                {currentStep === 1 && <PresaleRate data={formData} handleChange={handleChange} />}
+                {currentStep === 2 && <SwapInfo data={formData} handleChange={handleChange} />}
+                {currentStep === 3 && <AdditionalInfo data={formData} handleChange={handleChange} />}
+                {currentStep === 4 && <Timing data={formData} handleChange={handleDateChange} />}
+              </form>
 
-            <div className="d-flex justify-content-center gap-3 mt-3">
-              <Button variant="subtle" className="mx-2" onClick={onClickPrev}>
-                Prev
-              </Button>
+              <div className="d-flex justify-content-center gap-3 mt-3">
+                <Button variant="subtle" className="mx-2" onClick={onClickPrev}>
+                  Prev
+                </Button>
 
-              {currentStep === 4 ? (
-                <Button onClick={handleSubmit}>Submit</Button>
-              ) : (
-                <Button onClick={onClickNext}>Next</Button>
-              )}
+                {currentStep === 4 ? (
+                  <Button onClick={handleSubmit}>Submit</Button>
+                ) : (
+                  <Button onClick={onClickNext}>Next</Button>
+                )}
+              </div>
             </div>
-          </div>
           </CardBody>
-
         </AppBodyExtended>
       </Container>
       <div className="mt-5"> </div>

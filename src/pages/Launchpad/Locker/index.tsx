@@ -115,10 +115,12 @@ export default function Locker() {
       if (!library || !account) return
       const tokenContract = getTokenContract(token_address, library, account)
       const TName = await tokenContract?.callStatic.name()
-      setTokenName(TName)
       const TSymbol = await tokenContract?.callStatic.symbol()
-      setTokenName(TSymbol)
       const TDecimals = await tokenContract?.callStatic.decimals()
+
+      setFormData((prev) => ({ ...prev, token_name: TName, token_symbol: TSymbol, token_decimal: TDecimals }))
+      setTokenName(TName)
+      setTokenName(TSymbol)
       setTokenName(TDecimals)
     }
     if (account && token_address && library instanceof ethers.providers.Web3Provider) {
@@ -164,8 +166,8 @@ export default function Locker() {
 
       setAttemptingTxn(true)
       await method(...args)
-        .then(async (response:any) => {
-          const txReceipt = await response.wait();
+        .then(async (response: any) => {
+          const txReceipt = await response.wait()
           const lockId = txReceipt.events[2].args.id.toNumber()
           setAttemptingTxn(false)
           addBitgertLock({ ...formData, owner_address: owner_address ? owner_address : account, lock_id: lockId })
@@ -224,8 +226,8 @@ export default function Locker() {
 
       setAttemptingTxn(true)
       await method(...args)
-        .then(async (response:any) => {
-          const txReceipt = await response.wait();
+        .then(async (response: any) => {
+          const txReceipt = await response.wait()
           const lockId = txReceipt.events[2].args.id.toNumber()
           setAttemptingTxn(false)
           addBitgertLock({ ...formData, owner_address: owner_address ? owner_address : account, lock_id: lockId })
@@ -315,7 +317,7 @@ export default function Locker() {
     <>
       <Container>
         <AppBodyExtended>
-        <CardHeader>Lock Your Token</CardHeader>
+          <CardHeader>Lock Your Token</CardHeader>
           {txHash && (
             <TransactionConfirmationModal
               isOpen={true}
