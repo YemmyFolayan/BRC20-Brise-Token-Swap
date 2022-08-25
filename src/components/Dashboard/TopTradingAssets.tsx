@@ -37,10 +37,11 @@ const ASSETS_QUERY = gql`
       id
       name
       symbol
-      tradeVolume
+      tradeVolumeUSD
       totalLiquidity
       tokenDayData(orderDirection: "desc", first: 1, orderBy: "date") {
         priceUSD
+        totalLiquidityUSD
       }
     }
   }
@@ -69,8 +70,8 @@ const TopTradingAssets = () => {
                   {token.name} ({token.symbol})
                 </TableRowItem>
                 <TableRowItem>$ {parseFloat(token?.tokenDayData[0]?.priceUSD || 0).toFixed(8)}</TableRowItem>
-                <TableRowItem>{millify(parseFloat(token.tradeVolume))}</TableRowItem>
-                <TableRowItem>{millify(parseFloat(token.totalLiquidity))}</TableRowItem>
+                <TableRowItem>$ {parseFloat(token.tradeVolumeUSD).toFixed(4)}</TableRowItem>
+                <TableRowItem>$ {millify(parseFloat(token?.tokenDayData[0]?.totalLiquidityUSD || 0))}</TableRowItem>
               </TableRow>
             ))}
           </tbody>
