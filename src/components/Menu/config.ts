@@ -45,6 +45,10 @@ const config: MenuEntry[] = [
         label: 'Lockers',
         href: '/lock',
       },
+      {
+        label: 'Create Token',
+        href: '/create-token',
+      },
     ],
   },
 ]

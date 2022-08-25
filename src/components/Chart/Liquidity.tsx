@@ -15,6 +15,10 @@ const DAY_UPDATE_QUERY = gql`
       date
       totalLiquidityUSD
     }
+
+    bundle(id: "1") {
+      ethPrice
+    }
   }
 `
 
@@ -28,7 +32,7 @@ const Liquidity = () => {
     const { uniswapDayDatas } = graphData
     const formattedData = uniswapDayDatas.map((uniswapDayData) => ({
       ...uniswapDayData,
-      liquidity: Math.floor(Math.random() * (4000 - 1000 + 1) + 1000),
+      liquidity: uniswapDayData.totalLiquidityUSD,
       date: moment.unix(uniswapDayData.date).format('DD MMM'),
     }))
     setData(formattedData)

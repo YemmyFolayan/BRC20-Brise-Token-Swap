@@ -147,12 +147,11 @@ export default function Chart() {
   useEffect(() => {
     if (!priceGraphData) return
     const { tokenDayDatas } = priceGraphData
-    console.log(tokenDayDatas)
     const formattedData = tokenDayDatas.map((tokenDayData) => ({
-      open: Math.floor(Math.random() * (10 - 1 + 1) + 1),
-      high: Math.floor(Math.random() * (10 - 1 + 1) + 1),
-      low: Math.floor(Math.random() * (10 - 1 + 1) + 1),
-      close: Math.floor(Math.random() * (10 - 1 + 1) + 1),
+      open: tokenDayData.priceUSD,
+      high: tokenDayData.priceUSD,
+      low: tokenDayData.priceUSD,
+      close: tokenDayData.priceUSD,
       time: moment.unix(tokenDayData.date).format('YYYY-MM-DD'),
     }))
     setPriceData(formattedData)
@@ -243,13 +242,12 @@ export default function Chart() {
                 </HeadingContainer>
 
                 <PriceHeadingContainer>
-                  <PriceHeading>$ {(Math.floor(Math.random() * (10 - 1 + 1) + 1) / 3).toFixed(3)}</PriceHeading>
-                  {/* <PriceHeading>
+                  <PriceHeading>
                     ${' '}
                     {parseFloat(
                       priceGraphData?.tokenDayDatas[priceGraphData?.tokenDayDatas?.length - 1]?.priceUSD
                     ).toFixed(4)}
-                  </PriceHeading> */}
+                  </PriceHeading>
                 </PriceHeadingContainer>
 
                 <HeadingContainer>

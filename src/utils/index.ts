@@ -9,6 +9,7 @@ import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '
 import { REWARD_ABI, REWARD_ADDRESS } from 'constants/abis/reward'
 import { PRESALE_ABI, PRESALE_ADDRESS } from 'constants/abis/presale'
 import { AIRDROP_ABI, AIRDROP_ADDRESS } from 'constants/abis/airdrop'
+import { TOKEN_CREATOR_ABI, TOKEN_CREATOR_ADDRESS } from 'constants/abis/erc20'
 import { LOCK_ABI, LOCK_ADDRESS } from 'constants/abis/lock'
 import ERC20_ABI from 'constants/abis/erc20.json'
 import { ROUTER_ABI, ROUTER_ADDRESS } from '../constants'
@@ -110,6 +111,10 @@ export function getAirdropContract(_: number, library: Web3Provider, account?: s
   return getContract(AIRDROP_ADDRESS, AIRDROP_ABI, library, account)
 }
 
+export function getTokenCreatorContract(_: number, library: Web3Provider, account?: string): Contract {
+  return getContract(TOKEN_CREATOR_ADDRESS, TOKEN_CREATOR_ABI, library, account)
+}
+
 export function getBitgertLockContract(_: number, library: Web3Provider, account?: string): Contract {
   return getContract(LOCK_ADDRESS, LOCK_ABI, library, account)
 }
@@ -129,4 +134,8 @@ export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currenc
 
 export const bnDivideByDecimal = (a: BigNumberish) => {
   return new BN(a.toString()).dividedBy(new BN(1e18))
+}
+
+export const bnMultiplyByDecimal = (a: string, decimal: number) => {
+  return new BN(a).multipliedBy(new BN(10 ** decimal))
 }

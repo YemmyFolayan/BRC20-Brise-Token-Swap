@@ -17,6 +17,7 @@ import Wallet from './Wallet'
 import Migration from './Migration'
 import Airdrop from './Launchpad/Airdrop'
 import Locker from './Launchpad/Locker'
+import CreateToken from './Launchpad/CreateToken'
 import LockDirectory from './Launchpad/LockDirectory'
 import CreatePresale from './Launchpad/CreatePresale'
 import PresaleDirectory from './Launchpad/PresaleDirectory'
@@ -108,6 +109,7 @@ export default function App() {
                     <Route exact strict path="/presale/:saleId" component={PoolDetails} />
                     <Route exact strict path="/create-airdrop" component={Airdrop} />
                     <Route exact strict path="/create-lock" component={Locker} />
+                    <Route exact strict path="/create-token" component={CreateToken} />
                     <Route exact strict path="/lock" component={LockDirectory} />
                     <Route exact strict path="/lock/:lockId" component={LockDetails} />
                     <Route exact strict path="/locks/:tokenId" component={TokenDetails} />

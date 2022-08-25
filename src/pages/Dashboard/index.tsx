@@ -87,11 +87,16 @@ const FACTORY_QUERY = gql`
   {
     uniswapFactory(id: "0x456405E3d355ad27010Fd87e3c7cC8a2DcA372fD") {
       totalVolumeUSD
+      totalVolumeETH
       totalLiquidityUSD
     }
 
     token(id: "0xc1f9bdd0603665b9ae1e4d56e58240a018596b1a") {
       totalLiquidity
+    }
+
+    bundle(id: "1") {
+      ethPrice
     }
   }
 `
@@ -119,21 +124,21 @@ const Dashboard = () => {
             <FaChartLine fontSize="3rem" />
             <IconGridRowContainer>
               <IconGridHeader>Total Liquidity</IconGridHeader>
-              <IconGridSub>$ {data?.uniswapFactory?.totalLiquidityUSD || `0`} </IconGridSub>
+              <IconGridSub>$ {millify(parseFloat(data?.uniswapFactory?.totalLiquidityUSD)) || `0`} </IconGridSub>
             </IconGridRowContainer>
           </IconGrid>
           <IconGrid>
             <FaMoneyCheckAlt fontSize="3rem" />
             <IconGridRowContainer>
-              <IconGridHeader>Trading Fees</IconGridHeader>
-              <IconGridSub>$ 0</IconGridSub>
+              <IconGridHeader>BRISE Price</IconGridHeader>
+              <IconGridSub>$ {parseFloat(data?.bundle?.ethPrice).toFixed(8) || `0`}</IconGridSub>
             </IconGridRowContainer>
           </IconGrid>
           <IconGrid>
             <CgCircleci fontSize="3rem" />
             <IconGridRowContainer>
-              <IconGridHeader>Cir. Market Cap</IconGridHeader>
-              <IconGridSub>$ {data?.uniswapFactory?.totalVolumeUSD || `0`}</IconGridSub>
+              <IconGridHeader>Total Volume</IconGridHeader>
+              <IconGridSub>{millify(parseFloat(data?.uniswapFactory?.totalVolumeETH)) || `0`} BRISE</IconGridSub>
             </IconGridRowContainer>
           </IconGrid>
           <IconGrid>
