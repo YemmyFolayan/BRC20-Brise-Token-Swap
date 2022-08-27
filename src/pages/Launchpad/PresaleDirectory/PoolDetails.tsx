@@ -73,7 +73,7 @@ export default function PoolDetails({
   const [currentTime, setCurrentTime] = useState<any>()
   const [minContributeRate, setMinContributeRate] = useState<any>()
   const [maxContributeRate, setMaxContributeRate] = useState<any>()
-  const [userContributionBNB, setUserContributionBNB] = useState<any>()
+  const [userContributionBRISE, setUserContributionBRISE] = useState<any>()
   const [userContributionToken, setUserContributionToken] = useState<any>()
   const [presaleStatus, setPresaleStatus] = useState<boolean>(false)
   const [txHash, setTxHash] = useState<string>('')
@@ -102,14 +102,17 @@ export default function PoolDetails({
           setCurrent_time(parseInt(moment().format('X')))
           setCurrentTime(parseInt(moment().format('X')))
           // get presale details
+
           if (!chainId || !library || !account) return
           const presale = getPresaleContract(chainId, library, account)
+          console.log(presale?.callStatic)
+
           const minRate = await presale?.callStatic.minContributeRate(BigInt(saleId).toString())
           setMinContributeRate(minRate.toString())
           const maxRate = await presale?.callStatic.maxContributeRate(BigInt(saleId).toString())
           setMaxContributeRate(maxRate.toString())
-          const userBNB = await presale?.callStatic.userContributionBNB(BigInt(saleId).toString(), account)
-          setUserContributionBNB(userBNB.toString())
+          const userBRISE = await presale?.callStatic.userContributionBRISE(BigInt(saleId).toString(), account)
+          setUserContributionBRISE(userBRISE.toString())
           const userToken = await presale?.callStatic.userContributionToken(BigInt(saleId).toString(), account)
           setUserContributionToken(userToken.toString())
           const statusOfPresale = await presale?.callStatic.presaleStatus(BigInt(saleId).toString())
@@ -367,14 +370,25 @@ export default function PoolDetails({
               <div className="col-md-4 mt-2">
                 <PresaleInfoHeader>Tokens For Presale</PresaleInfoHeader>
                 <PresaleInfoSubHeader>
-                  {presale.tokens_presale !== null ? presale.tokens_presale : 0} {presale.token_symbol}
+                  {ethers.utils.formatUnits(
+                    ethers.BigNumber.from(depositAmount || 0),
+                    parseInt(presale.token_decimal || 0)
+                  )}{' '}
+                  {presale.token_symbol}
                 </PresaleInfoSubHeader>
               </div>
 
               <div className="col-md-4 mt-2">
                 <PresaleInfoHeader>Tokens For Liquidity</PresaleInfoHeader>
                 <PresaleInfoSubHeader>
-                  {presale.tokens_liquidity !== null ? presale.tokens_liquidity : 0} {presale.token_symbol}
+                  {parseFloat(
+                    ethers.utils.formatUnits(
+                      ethers.BigNumber.from(depositAmount || 0),
+                      parseInt(presale.token_decimal || 0)
+                    )
+                  ) *
+                    (parseInt(presale?.router_rate || 70) / 100)}{' '}
+                  {presale.token_symbol}
                 </PresaleInfoSubHeader>
               </div>
 
@@ -529,7 +543,7 @@ export default function PoolDetails({
 
                         <tr>
                           <td>Your Contributed Account:</td>
-                          <td>{ethers.utils.formatUnits(ethers.BigNumber.from(userContributionBNB || 0))} BRISE</td>
+                          <td>{ethers.utils.formatUnits(ethers.BigNumber.from(userContributionBRISE || 0))} BRISE</td>
                         </tr>
 
                         <tr>
@@ -616,7 +630,9 @@ export default function PoolDetails({
                           <>
                             <tr>
                               <td>Your Contributed Account:</td>
-                              <td>{ethers.utils.formatUnits(ethers.BigNumber.from(userContributionBNB || 0))} BRISE</td>
+                              <td>
+                                {ethers.utils.formatUnits(ethers.BigNumber.from(userContributionBRISE || 0))} BRISE
+                              </td>
                             </tr>
 
                             <tr>
