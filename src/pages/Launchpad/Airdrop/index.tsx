@@ -5,12 +5,15 @@ import { Button, CardBody, Input } from '@evofinance9/uikit'
 import { ethers } from 'ethers'
 
 import { BigNumber } from '@ethersproject/bignumber'
+import { DateTimePicker } from '@material-ui/pickers'
+import { TextField, withStyles } from '@material-ui/core'
 import { TransactionResponse } from '@ethersproject/providers'
 
 import addAirdrop from './apicalls'
 
 import { useAirdropContract, useDateTimeContract } from 'hooks/useContract'
 import { getAirdropContract } from 'utils'
+import getUnixTimestamp from 'utils/getUnixTimestamp'
 
 import './style.css'
 import { AppBodyExtended } from 'pages/AppBody'
@@ -20,9 +23,38 @@ import { useActiveWeb3React } from 'hooks'
 import Container from 'components/Container'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
 
+const CssTextField = withStyles({
+  root: {
+    '&': {
+      border: 'red',
+      borderRadius: '16px',
+    },
+    '& label.Mui-focused': {
+      color: '#aaa',
+    },
+
+    '& .MuiInputBase-input': {
+      color: '#F4EEFF',
+      backgroundColor: '#18191A',
+      borderRadius: '16px',
+      boxShadow: 'inset 0px 2px 2px -1px rgb(74 74 104 / 10%)',
+      display: 'block',
+      fontSize: '16px',
+      height: '48px',
+      outline: '0',
+      padding: '0 16px',
+    },
+    '& .MuiInputBase-input:focus': {
+      boxShadow: '0px 0px 0px 1px #7645D9,0px 0px 0px 4pxrgba(118,69,217,0.6)',
+    },
+  },
+})(TextField)
+
 export default function Airdrop() {
   const { account, chainId, library } = useActiveWeb3React()
   const airdropContract = useAirdropContract(true)
+
+  const dateTimeContract = useDateTimeContract()
 
   const [txHash, setTxHash] = useState<string>('')
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
@@ -35,6 +67,8 @@ export default function Airdrop() {
     token_name: '',
     token_symbol: '',
     token_decimal: '',
+    addresses_to: '',
+    amounts_to: '',
     logo_url: '',
     website_url: '',
     twitter_url: '',
@@ -56,6 +90,8 @@ export default function Airdrop() {
     logo_url,
     website_url,
     title,
+    addresses_to,
+    amounts_to,
     twitter_url,
     instagram_url,
     telegram_url,
@@ -75,21 +111,71 @@ export default function Airdrop() {
     setFormData({ ...formData, [name]: value })
   }
 
+  const handleDateChange = (name, value) => {
+    setFormData({ ...formData, [name]: value })
+  }
+
   const createAirdrop = async (formData) => {
     if (!chainId || !library || !account) return
     const airdrop = getAirdropContract(chainId, library, account)
-    const payload = [
-      token_address,
-    ]
+
+    // const currentAirdropId = await airdropContract?.callStatic.currentAirdropId()
+    const staticFee = await airdropContract?.callStatic.staticFee()
+
+    const payload = [addresses_to.split(','), amounts_to.split(','), token_address, false, 0, 0, 0]
     console.log(airdrop)
-    const method: (...args: any) => Promise<TransactionResponse> = airdrop!.BitgertAirdrop
-    const args: Array<object | string[] | number> = [payload]
+    console.log(payload)
+    const method: (...args: any) => Promise<TransactionResponse> = airdrop!.createAirdrop
+    const args: Array<object | string[] | string | boolean | number> = payload
+    const value: BigNumber = ethers.utils.parseEther(`${ethers.utils.formatEther(staticFee.toString())}`)
 
     setAttemptingTxn(true)
-    await method(...args)
-      .then((response) => {
+    await method(...args, {
+      value: value,
+    })
+      .then(async (response: any) => {
+        const txReceipt = await response.wait()
+        console.log(txReceipt)
+        const airdropId = txReceipt.events[0].args.airdropID.toNumber()
+        console.log(airdropId)
         setAttemptingTxn(false)
         console.log(response)
+        addAirdrop({
+          ...formData,
+          addresses_to: addresses_to.split(','),
+          amounts_to: amounts_to.split(','),
+          airdrop_id: airdropId,
+          owner_address: account,
+        })
+          .then((data) => {
+            if (data.error) {
+              swal('Oops', 'Something went wrong!', 'error')
+            } else {
+              setFormData({
+                ...formData,
+                chain_id: '32520',
+                owner_address: '',
+                token_address: '',
+                token_name: '',
+                token_symbol: '',
+                token_decimal: '',
+                addresses_to: '',
+                amounts_to: '',
+                logo_url: '',
+                website_url: '',
+                twitter_url: '',
+                instagram_url: '',
+                telegram_url: '',
+                discord_url: '',
+                reddit_url: '',
+                github_url: '',
+                title: '',
+                description: '',
+              })
+              swal('Congratulations!', 'Airdrop is added!', 'success')
+            }
+          })
+          .catch((err) => console.log('Error in signup'))
         setTxHash(response.hash)
       })
       .catch((e) => {
@@ -110,15 +196,9 @@ export default function Airdrop() {
       !token_name ||
       !token_decimal ||
       !token_symbol ||
-      !logo_url ||
-      !website_url ||
       !title ||
-      !twitter_url ||
-      !instagram_url ||
-      !telegram_url ||
-      !discord_url ||
-      !reddit_url ||
-      !github_url ||
+      !addresses_to ||
+      !amounts_to ||
       !description
     ) {
       swal('Are you sure?', 'There are incomplete fields in your submission!', 'warning')
@@ -126,35 +206,6 @@ export default function Airdrop() {
     }
 
     createAirdrop(formData)
-
-    addAirdrop(formData)
-      .then((data) => {
-        if (data.error) {
-          swal('Oops', 'Something went wrong!', 'error')
-        } else {
-          setFormData({
-            ...formData,
-            chain_id: '32520',
-            owner_address: '',
-            token_address: '',
-            token_name: '',
-            token_symbol: '',
-            token_decimal: '',
-            logo_url: '',
-            website_url: '',
-            twitter_url: '',
-            instagram_url: '',
-            telegram_url: '',
-            discord_url: '',
-            reddit_url: '',
-            github_url: '',
-            title: '',
-            description: '',
-          })
-          swal('Congratulations!', 'Airdrop is added!', 'success')
-        }
-      })
-      .catch((err) => console.log('Error in signup'))
   }
 
   return (
@@ -174,6 +225,8 @@ export default function Airdrop() {
 
           <div className=" text-white mb-5  ">
             <CardBody>
+              <h1 className="d-flex justify-content-center">Airdrop</h1>
+              <br />
               <div className="row">
                 <div className="col-md-6 mb-3">
                   <Input
@@ -222,6 +275,26 @@ export default function Airdrop() {
                     scale="lg"
                     value={title}
                     onChange={handleChange('title')}
+                  />
+                </div>
+
+                <div className="col-md-12 mb-3">
+                  <Input
+                    placeholder="Airdrop Addresses"
+                    className="mt-3"
+                    scale="lg"
+                    value={addresses_to}
+                    onChange={handleChange('addresses_to')}
+                  />
+                </div>
+
+                <div className="col-md-12 mb-3">
+                  <Input
+                    placeholder="Airdrop Amounts"
+                    className="mt-3"
+                    scale="lg"
+                    value={amounts_to}
+                    onChange={handleChange('amounts_to')}
                   />
                 </div>
 
