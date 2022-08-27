@@ -1,0 +1,23 @@
+.dot {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 50% !important;
+}
+
+.airdrop__logo img {
+  max-width: 90px;
+  max-height: 90px;
+}
+
+.links__logo img {
+  max-width: 55px;
+  max-height: 40px;
+}
+
+.airdrop__progress {
+  height: 8px;
+}
+
+.airdrop__card {
+  background-color: #2e2e2e !important;
+}

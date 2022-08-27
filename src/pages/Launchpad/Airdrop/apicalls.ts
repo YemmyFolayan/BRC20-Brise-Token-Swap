@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { SWAP_API } from 'backend'
 
 const addAirdrop = (payload) => {
@@ -14,6 +15,5 @@ const addAirdrop = (payload) => {
     })
     .catch((err) => console.log(err))
 }
-
 
 export default addAirdrop

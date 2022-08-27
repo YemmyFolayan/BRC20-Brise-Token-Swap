@@ -24,6 +24,8 @@ import PresaleDirectory from './Launchpad/PresaleDirectory'
 import PoolDetails from './Launchpad/PresaleDirectory/PoolDetails'
 import TokenDetails from './Launchpad/LockDirectory/TokenDetails'
 import LockDetails from './Launchpad/LockDirectory/LockDetails'
+import AirdropDetails from './Launchpad/AirdropDirectory/AirdropDetails'
+import AirdropDirectory from './Launchpad/AirdropDirectory'
 import { RedirectPathToSwapOnly } from './Swap/redirects'
 import { EN, allLanguages } from '../constants/localisation/languageCodes'
 import { LanguageContext } from '../hooks/LanguageContext'
@@ -108,6 +110,8 @@ export default function App() {
                     <Route exact strict path="/presale" component={PresaleDirectory} />
                     <Route exact strict path="/presale/:saleId" component={PoolDetails} />
                     <Route exact strict path="/create-airdrop" component={Airdrop} />
+                    <Route exact strict path="/airdrop" component={AirdropDirectory} />
+                    <Route exact strict path="/airdrop/:airdropId" component={AirdropDetails} />
                     <Route exact strict path="/create-lock" component={Locker} />
                     <Route exact strict path="/create-token" component={CreateToken} />
                     <Route exact strict path="/lock" component={LockDirectory} />
