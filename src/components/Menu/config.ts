@@ -29,14 +29,14 @@ const config: MenuEntry[] = [
         label: 'Presale Directory',
         href: '/presale',
       },
-      // {
-      //   label: 'Airdrop',
-      //   href: '/create-airdrop',
-      // },
-      // {
-      //   label: 'Airdrop Directory',
-      //   href: '/airdrop',
-      // },
+      {
+        label: 'Airdrop',
+        href: '/create-airdrop',
+      },
+      {
+        label: 'Airdrop Directory',
+        href: '/airdrop',
+      },
       {
         label: 'Lock Tokens',
         href: '/create-lock',
