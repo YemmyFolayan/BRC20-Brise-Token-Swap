@@ -34,7 +34,7 @@ export default function SwapInfo({ handleChange, data }: FormComponentProps) {
 
         <div className="col-md-12 mb-3">
           <label htmlFor="inputListingRate" className="form-label">
-            Enter the SphynxSwap listing price: (If I buy 1 BRISE worth on Swap how many tokens do I get? Usually this
+            Enter the BitgertSwap listing price: (If I buy 1 BRISE worth on Swap how many tokens do I get? Usually this
             amount is lower than presale rate to allow for a higher listing price on Swap)
           </label>
           <div className="row">

@@ -19,5 +19,33 @@
 }
 
 .presale__card {
-  background-color: #2e2e2e !important;
+  background-color: #151212 !important;
+}
+
+
+.social__icons__container {
+  display: flex;
+  justify-content: center;
+  gap: 10px
+}
+
+.token__name {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 300 !important;
+  font-size: 1rem !important;
+}
+
+.token__symbol {
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+}
+
+.custom-gap-2 {
+  gap: 5px;
+}
+
+.custom-font {
+  font-family: 'Poppins', sans-serif !important;
+
 }

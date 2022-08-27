@@ -19,7 +19,6 @@ import Providers from './Providers'
 import { GRAPH_ENDPOINT } from './backend'
 import 'inter-ui'
 import './i18n'
-
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 

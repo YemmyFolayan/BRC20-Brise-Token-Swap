@@ -1,5 +1,6 @@
 /* eslint-disable */
 import React, { useState } from 'react'
+import moment from 'moment'
 import swal from 'sweetalert'
 import Stepper from 'react-stepper-horizontal'
 import { ethers } from 'ethers'
@@ -159,11 +160,13 @@ export default function CreatePresale() {
     const {
       owner_address,
       token_address,
+      token_decimal,
       soft_cap,
       hard_cap,
       tier1,
       tier2,
       tier3,
+      listing_rate,
       min_buy,
       max_buy,
       router_rate,
@@ -181,29 +184,29 @@ export default function CreatePresale() {
     const payload = [
       currentPresaleId.toNumber(),
       token_address,
-      min_buy,
-      max_buy,
-      await getUnixTimestamp(dateTimeContract, start_time),
-      await getUnixTimestamp(dateTimeContract, tier1_time),
-      await getUnixTimestamp(dateTimeContract, tier2_time),
-      await getUnixTimestamp(dateTimeContract, end_time),
-      await getUnixTimestamp(dateTimeContract, lock_time),
+      ethers.utils.parseUnits(min_buy, parseInt(token_decimal)).toString(),
+      ethers.utils.parseUnits(max_buy, parseInt(token_decimal)).toString(),
+      moment(start_time).format('X'),
+      moment(tier1_time).format('X'),
+      moment(tier2_time).format('X'),
+      moment(end_time).format('X'),
+      moment(lock_time).format('X'),
       ROUTER_ADDRESS,
-      tier1,
-      tier2,
-      tier3,
+      ethers.utils.parseUnits(tier1, parseInt(token_decimal)).toString(),
+      ethers.utils.parseUnits(tier2, parseInt(token_decimal)).toString(),
+      ethers.utils.parseUnits(tier3, parseInt(token_decimal)).toString(),
+      ethers.utils.parseUnits(listing_rate, parseInt(token_decimal)).toString(),
+      ethers.utils.parseUnits(soft_cap, parseInt(token_decimal)).toString(),
+      ethers.utils.parseUnits(hard_cap, parseInt(token_decimal)).toString(),
       router_rate,
-      soft_cap,
-      hard_cap,
-      router_rate,
-      router_rate,
+      0,
       false,
       false,
-      '100',
-      '86400',
-      '2',
+      '0',
+      '0',
+      '0',
       false,
-      '0xa131AD247055FD2e2aA8b156A11bdEc81b9eAD95',
+      '0x0000000000000000000000000000000000000000',
     ]
 
     const method: (...args: any) => Promise<TransactionResponse> = presale!.createPresale
@@ -342,10 +345,6 @@ export default function CreatePresale() {
       !reddit_link ||
       !telegram_link ||
       !project_dec ||
-      !certik_audit ||
-      !doxxed_team ||
-      !utility ||
-      !kyc ||
       !start_time ||
       !end_time ||
       !tier1_time ||

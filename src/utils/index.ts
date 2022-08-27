@@ -139,3 +139,7 @@ export const bnDivideByDecimal = (a: BigNumberish) => {
 export const bnMultiplyByDecimal = (a: string, decimal: number) => {
   return new BN(a).multipliedBy(new BN(10 ** decimal))
 }
+
+export const formatTokenAmount = (a: string, decimal: number) => {
+  return new BN(a).dividedBy(new BN(10 ** decimal)).toNumber()
+}

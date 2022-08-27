@@ -68,8 +68,6 @@ const CreateToken = () => {
     const args: Array<string | number | boolean> = payload
     const value: BigNumber = ethers.utils.parseEther(`${currentFee}`)
 
-    console.log(args)
-
     setAttemptingTxn(true)
     await method(...args, {
       value: value,
