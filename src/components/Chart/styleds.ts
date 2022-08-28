@@ -32,6 +32,7 @@ export const PriceHeadingContainer = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
+  margin-bottom: 1rem;
 `
 
 export const PriceHeading = styled.h1`

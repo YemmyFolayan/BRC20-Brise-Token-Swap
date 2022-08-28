@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
 import swal from 'sweetalert'
-import { Button, CardBody, Input } from '@evofinance9/uikit'
+import { Button, CardBody, Input, CardHeader } from '@evofinance9/uikit'
 import { ethers } from 'ethers'
 
 import { BigNumber } from '@ethersproject/bignumber'
@@ -9,10 +9,12 @@ import { DateTimePicker } from '@material-ui/pickers'
 import { TextField, withStyles } from '@material-ui/core'
 import { TransactionResponse } from '@ethersproject/providers'
 
+import { FaInfoCircle } from 'react-icons/fa'
+
 import addAirdrop from './apicalls'
 
 import { useAirdropContract, useDateTimeContract } from 'hooks/useContract'
-import { getAirdropContract } from 'utils'
+import { getAirdropContract, getTokenContract } from 'utils'
 import getUnixTimestamp from 'utils/getUnixTimestamp'
 
 import './style.css'
@@ -22,6 +24,7 @@ import { useActiveWeb3React } from 'hooks'
 
 import Container from 'components/Container'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
+import Tooltip from 'components/Tooltip'
 
 const CssTextField = withStyles({
   root: {
@@ -59,6 +62,8 @@ export default function Airdrop() {
   const [txHash, setTxHash] = useState<string>('')
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
+  const [allowcationTooltip, setAllowcationTooltip] = useState<boolean>(false)
+  const [allowcationAmountTooltip, setAllowcationAmountTooltip] = useState<boolean>(false)
 
   const [formData, setFormData] = useState({
     chain_id: '32520',
@@ -101,6 +106,21 @@ export default function Airdrop() {
     description,
   } = formData
 
+  useEffect(() => {
+    const fetch = async () => {
+      if (!library || !account) return
+      const tokenContract = getTokenContract(token_address, library, account)
+      const TName = await tokenContract?.callStatic.name()
+      const TSymbol = await tokenContract?.callStatic.symbol()
+      const TDecimals = await tokenContract?.callStatic.decimals()
+
+      setFormData((prev) => ({ ...prev, token_name: TName, token_symbol: TSymbol, token_decimal: TDecimals }))
+    }
+    if (account && token_address && library instanceof ethers.providers.Web3Provider) {
+      fetch()
+    }
+  }, [token_address, account, library])
+
   const handleDismissConfirmation = () => {
     setShowConfirm(false)
     setTxHash('')
@@ -122,7 +142,17 @@ export default function Airdrop() {
     // const currentAirdropId = await airdropContract?.callStatic.currentAirdropId()
     const staticFee = await airdropContract?.callStatic.staticFee()
 
-    const payload = [addresses_to.split(','), amounts_to.split(','), token_address, false, 0, 0, 0]
+    const payload = [
+      addresses_to.split(','),
+      amounts_to
+        .split(',')
+        .map((amount) => ethers.utils.parseUnits(amount.toString(), parseInt(token_decimal)).toString()),
+      token_address,
+      false,
+      0,
+      0,
+      0,
+    ]
     console.log(airdrop)
     console.log(payload)
     const method: (...args: any) => Promise<TransactionResponse> = airdrop!.createAirdrop
@@ -222,177 +252,205 @@ export default function Airdrop() {
               pendingText={''}
             />
           )}
+          <CardHeader>Create Airdrop</CardHeader>
+          <CardBody>
+            <div className="row">
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Token Address"
+                  className="mt-3"
+                  scale="lg"
+                  value={token_address}
+                  onChange={handleChange('token_address')}
+                />
+              </div>
 
-          <div className=" text-white mb-5  ">
-            <CardBody>
-              <h1 className="d-flex justify-content-center">Airdrop</h1>
-              <br />
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Token Address"
-                    className="mt-3"
-                    scale="lg"
-                    value={token_address}
-                    onChange={handleChange('token_address')}
-                  />
-                </div>
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Token Name"
+                  scale="lg"
+                  className="mt-3"
+                  value={token_name}
+                  onChange={handleChange('token_name')}
+                />
+              </div>
 
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Token Name"
-                    scale="lg"
-                    className="mt-3"
-                    value={token_name}
-                    onChange={handleChange('token_name')}
-                  />
-                </div>
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Token Symbol"
+                  scale="lg"
+                  className="mt-3"
+                  value={token_symbol}
+                  onChange={handleChange('token_symbol')}
+                />
+              </div>
 
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Token Symbol"
-                    scale="lg"
-                    className="mt-3"
-                    value={token_symbol}
-                    onChange={handleChange('token_symbol')}
-                  />
-                </div>
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Token Decimal"
+                  className="mt-3"
+                  scale="lg"
+                  value={token_decimal}
+                  onChange={handleChange('token_decimal')}
+                />
+              </div>
 
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Token Decimal"
-                    className="mt-3"
-                    scale="lg"
-                    value={token_decimal}
-                    onChange={handleChange('token_decimal')}
-                  />
-                </div>
+              <div className="col-md-12 mb-3">
+                <Input
+                  placeholder="Airdrop Title"
+                  className="mt-3"
+                  scale="lg"
+                  value={title}
+                  onChange={handleChange('title')}
+                />
+              </div>
 
-                <div className="col-md-12 mb-3">
-                  <Input
-                    placeholder="Airdrop Title"
-                    className="mt-3"
-                    scale="lg"
-                    value={title}
-                    onChange={handleChange('title')}
-                  />
-                </div>
-
-                <div className="col-md-12 mb-3">
-                  <Input
-                    placeholder="Airdrop Addresses"
-                    className="mt-3"
-                    scale="lg"
-                    value={addresses_to}
-                    onChange={handleChange('addresses_to')}
-                  />
-                </div>
-
-                <div className="col-md-12 mb-3">
-                  <Input
-                    placeholder="Airdrop Amounts"
-                    className="mt-3"
-                    scale="lg"
-                    value={amounts_to}
-                    onChange={handleChange('amounts_to')}
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Logo URL"
-                    scale="lg"
-                    className="mt-3"
-                    value={logo_url}
-                    onChange={handleChange('logo_url')}
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Website"
-                    className="mt-3"
-                    scale="lg"
-                    value={website_url}
-                    onChange={handleChange('website_url')}
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Twiiter URL"
-                    className="mt-3"
-                    scale="lg"
-                    value={twitter_url}
-                    onChange={handleChange('twitter_url')}
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Instagram URL"
-                    className="mt-3"
-                    scale="lg"
-                    value={instagram_url}
-                    onChange={handleChange('instagram_url')}
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Telegram URL"
-                    className="mt-3"
-                    scale="lg"
-                    value={telegram_url}
-                    onChange={handleChange('telegram_url')}
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Discord URL"
-                    className="mt-3"
-                    scale="lg"
-                    value={discord_url}
-                    onChange={handleChange('discord_url')}
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Reddit URL"
-                    className="mt-3"
-                    scale="lg"
-                    value={reddit_url}
-                    onChange={handleChange('reddit_url')}
-                  />
-                </div>
-
-                <div className="col-md-6 mb-3">
-                  <Input
-                    placeholder="Github URL"
-                    className="mt-3"
-                    scale="lg"
-                    value={github_url}
-                    onChange={handleChange('github_url')}
-                  />
-                </div>
-
-                <div className="col-md-12 mb-3">
-                  <Input
-                    placeholder="Description"
-                    className="mt-3"
-                    scale="lg"
-                    value={description}
-                    onChange={handleChange('description')}
-                  />
+              <div className="col-md-12 mb-3">
+                <div className="row">
+                  <div className="col-md-11">
+                    <Input
+                      placeholder="Airdrop Addresses"
+                      className="mt-3"
+                      scale="lg"
+                      value={addresses_to}
+                      onChange={handleChange('addresses_to')}
+                    />
+                  </div>
+                  <div className="col-md-1 d-flex align-items-center justify-content-center">
+                    <Tooltip
+                      show={allowcationTooltip}
+                      placement="right"
+                      text="Allocation addresses must be comma-separated"
+                    >
+                      <FaInfoCircle
+                        onMouseEnter={() => setAllowcationTooltip(true)}
+                        onMouseLeave={() => setAllowcationTooltip(false)}
+                      />
+                    </Tooltip>
+                  </div>
                 </div>
               </div>
-            </CardBody>
 
-            <div className="d-flex justify-content-center gap-3 mt-3">
-              <Button onClick={handleSubmit}>Submit</Button>
+              <div className="col-md-12 mb-3">
+                <div className="row">
+                  <div className="col-md-11">
+                    <Input
+                      placeholder="Airdrop Amounts"
+                      className="mt-3"
+                      scale="lg"
+                      value={amounts_to}
+                      onChange={handleChange('amounts_to')}
+                    />
+                  </div>
+                  <div className="col-md-1 d-flex align-items-center justify-content-center">
+                    <Tooltip
+                      show={allowcationAmountTooltip}
+                      placement="right"
+                      text="Allocation amounts must be comma-separated"
+                    >
+                      <FaInfoCircle
+                        onMouseEnter={() => setAllowcationAmountTooltip(true)}
+                        onMouseLeave={() => setAllowcationAmountTooltip(false)}
+                      />
+                    </Tooltip>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Logo URL"
+                  scale="lg"
+                  className="mt-3"
+                  value={logo_url}
+                  onChange={handleChange('logo_url')}
+                />
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Website"
+                  className="mt-3"
+                  scale="lg"
+                  value={website_url}
+                  onChange={handleChange('website_url')}
+                />
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Twiiter URL"
+                  className="mt-3"
+                  scale="lg"
+                  value={twitter_url}
+                  onChange={handleChange('twitter_url')}
+                />
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Instagram URL"
+                  className="mt-3"
+                  scale="lg"
+                  value={instagram_url}
+                  onChange={handleChange('instagram_url')}
+                />
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Telegram URL"
+                  className="mt-3"
+                  scale="lg"
+                  value={telegram_url}
+                  onChange={handleChange('telegram_url')}
+                />
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Discord URL"
+                  className="mt-3"
+                  scale="lg"
+                  value={discord_url}
+                  onChange={handleChange('discord_url')}
+                />
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Reddit URL"
+                  className="mt-3"
+                  scale="lg"
+                  value={reddit_url}
+                  onChange={handleChange('reddit_url')}
+                />
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <Input
+                  placeholder="Github URL"
+                  className="mt-3"
+                  scale="lg"
+                  value={github_url}
+                  onChange={handleChange('github_url')}
+                />
+              </div>
+
+              <div className="col-md-12 mb-3">
+                <Input
+                  placeholder="Description"
+                  className="mt-3"
+                  scale="lg"
+                  value={description}
+                  onChange={handleChange('description')}
+                />
+              </div>
             </div>
+          </CardBody>
+
+          <div className="d-flex justify-content-center  mb-5">
+            <Button onClick={handleSubmit}>Submit</Button>
           </div>
         </AppBodyExtended>
       </Container>

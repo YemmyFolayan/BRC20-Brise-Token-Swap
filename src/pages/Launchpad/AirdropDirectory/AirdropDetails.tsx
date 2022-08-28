@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react'
-import { Card, Badge, Button as BSButton, ProgressBar, Table } from 'react-bootstrap'
+import { Card, Badge, Button as BSButton, ProgressBar } from 'react-bootstrap'
 
 import swal from 'sweetalert'
 import { Button, CardBody, Input } from '@evofinance9/uikit'
@@ -11,6 +11,7 @@ import '@djthoms/pretty-checkbox'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { TelegramIcon, TwitterIcon, WWWIcon } from '../../../assets/images'
+import { SocialIcon } from 'react-social-icons'
 
 import { ethers } from 'ethers'
 import Form from 'react-bootstrap/Form'
@@ -25,6 +26,7 @@ import { getAirdropContract, getTokenContract } from 'utils'
 import getUnixTimestamp from 'utils/getUnixTimestamp'
 import CountDownTimer from '../CountDownTimer'
 import { AIRDROP_ADDRESS } from 'constants/abis/airdrop'
+import { Oval } from 'react-loader-spinner'
 
 import './style.css'
 import { AppBodyExtended } from 'pages/AppBody'
@@ -32,6 +34,19 @@ import TransactionConfirmationModal from 'components/TransactionConfirmationModa
 import { RouteComponentProps } from 'react-router-dom'
 import { getAirdropById } from './apicalls'
 import { setFlagsFromString } from 'v8'
+import {
+  TableWrapper,
+  Table,
+  TableHeader,
+  AirdropCardWrapper,
+  AirdropCard,
+  AirdropCardBody,
+  AirdropHeader,
+  AirdropSubHeader,
+  TableWrapperExtended,
+  IconsWrapper,
+  LoaderWrapper,
+} from './styleds'
 
 interface FormComponentProps {
   match: {
@@ -78,7 +93,7 @@ export default function AirdropDetails({
   const dateTimeContract = useDateTimeContract()
   const tokenContract = useTokenContract('0x0eb9036cbE0f052386f36170c6b07eF0a0E3f710', true)
 
-  const [airdrop, setAirdrop] = useState<any>({})
+  const [airdrop, setAirdrop] = useState<any>(null)
   const [totalAmount, setTotalAmount] = useState(0)
   const [balance, setBalance] = useState(0)
   const [totalSupply, setTotalSupply] = useState(0)
@@ -98,6 +113,8 @@ export default function AirdropDetails({
   const [cancelled, setCancelled] = useState<boolean>(false)
   const [txHash, setTxHash] = useState<string>('')
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
+  const [isArroved, setIsArroved] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const [formData, setFormData] = useState({
     chain_id: '32520',
@@ -112,6 +129,7 @@ export default function AirdropDetails({
   // fetch airdrop info
   useEffect(() => {
     const fetch = async () => {
+      setLoading(true)
       getAirdropById(airdropId)
         .then(async (response) => {
           setAirdrop(response)
@@ -150,8 +168,11 @@ export default function AirdropDetails({
             arr += parseFloat(response.amounts_to[i])
           }
           setTotalAmount(arr)
+          setLoading(false)
         })
         .catch((err) => {
+          setLoading(false)
+
           console.log(err)
           swal('Oops', 'Something went wrong!', 'error')
         })
@@ -163,8 +184,8 @@ export default function AirdropDetails({
     setFormData({ ...formData, [name]: value })
   }
 
-  const StartAirdrop = async (formData) => {
-    if (!chainId || !library || !account) return
+  const startAirdrop = async () => {
+    if (!chainId || !library || !account || !airdropId) return
     const airdrop = getAirdropContract(chainId, library, account)
 
     const payload = [parseInt(airdropID), moment(start_date).format('X')]
@@ -188,31 +209,28 @@ export default function AirdropDetails({
       })
   }
 
-  const handleStart = () => {
-    if (!airdropId) {
-      swal('Are you sure?', 'There are incomplete fields in your submission!', 'warning')
-      return
-    }
-
-    StartAirdrop(formData)
-  }
-
-  const ApproveBitgertAirdrop = async (formData) => {
-    if (!chainId || !library || !account) return
+  const handleAllowance = async () => {
+    if (!chainId || !library || !account || !tokenAddress) return
     const tokenContract = getTokenContract(tokenAddress, library, account)
 
-    const payload = [AIRDROP_ADDRESS, totalAmount]
+    const payload = [
+      AIRDROP_ADDRESS,
+      ethers.utils.parseUnits(totalAmount.toString(), parseInt(airdrop.token_decimal)).toString(),
+    ]
 
     const method: (...args: any) => Promise<TransactionResponse> = tokenContract!.approve
     const args: Array<string | string[] | string | number> = payload
 
     setAttemptingTxn(true)
+    setIsArroved(false)
     await method(...args)
       .then((response) => {
+        setIsArroved(true)
         setAttemptingTxn(false)
         setTxHash(response.hash)
       })
       .catch((e) => {
+        setIsArroved(false)
         setAttemptingTxn(false)
         // we only care if the error is something _other_ than the user rejected the tx
         if (e?.code !== 4001) {
@@ -222,13 +240,8 @@ export default function AirdropDetails({
       })
   }
 
-  const handleAllowance = () => {
-    if (!account || !tokenAddress) return
-    ApproveBitgertAirdrop(formData)
-  }
-
-  const WithdrawAirdrop = async () => {
-    if (!chainId || !library || !account) return
+  const handleWithdraw = async () => {
+    if (!chainId || !library || !account || !airdropId) return
     const airdrop = getAirdropContract(chainId, library, account)
 
     const payload = [parseInt(airdropID)]
@@ -252,17 +265,8 @@ export default function AirdropDetails({
       })
   }
 
-  const handleWithdraw = () => {
-    if (!airdropId) {
-      swal('Are you sure?', 'There are incomplete fields in your submission!', 'warning')
-      return
-    }
-
-    WithdrawAirdrop()
-  }
-
-  const ClaimAirdrop = async () => {
-    if (!chainId || !library || !account) return
+  const handleClaim = async () => {
+    if (!chainId || !library || !account || !airdropId) return
     const airdrop = getAirdropContract(chainId, library, account)
 
     const payload = [parseInt(airdropID)]
@@ -286,86 +290,131 @@ export default function AirdropDetails({
       })
   }
 
-  const handleClaim = () => {
-    if (!airdropId) {
-      swal('Are you sure?', 'There are incomplete fields in your submission!', 'warning')
-      return
-    }
-
-    ClaimAirdrop()
-  }
-
   return (
-    <div>
-      <div className=" d-flex justify-content-between my-3 ">
-        <Card style={{ width: '35rem', margin: '0 auto' }} className="airdrop__card" text="light">
-          <Card.Body>
-            <div className="d-flex justify-content-center">
-              <div className="airdrop__logo">
-                <img src={airdrop.logo_link} alt="Airdrop Logo" className="rounded" />
-              </div>
-            </div>
-            <div className="d-flex justify-content-center my-3">
-              <h1 className="col-xs-3">{airdrop.title}</h1>
-            </div>
-            <div className="d-flex justify-content-center text-justify my-3">
-              <h2 className="col-sx-3 font-italic">{airdrop.description}</h2>
-            </div>
-            <div className=" d-flex justify-content-between my-4">
-              <Link to={airdrop.telegram_link}>
-                <div className="links__logo">
-                  <img src={TelegramIcon} alt="Telegram Logo" className="rounded " />
-                </div>
-              </Link>
-              <Link to={airdrop.twitter_link}>
-                <div className="links__logo">
-                  <img src={TwitterIcon} alt="Twitter Logo" className="rounded " />
-                </div>
-              </Link>
-              <Link to={airdrop.website_link}>
-                <div className="links__logo">
-                  <img src={WWWIcon} alt="WWW Logo" className="rounded " />
-                </div>
-              </Link>
-            </div>
+    <Container>
+      {loading && (
+        <LoaderWrapper>
+          <Oval
+            height={80}
+            width={80}
+            color="#f9d849"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel="oval-loading"
+            secondaryColor="#f4d85b"
+            strokeWidth={2}
+            strokeWidthSecondary={2}
+          />
+        </LoaderWrapper>
+      )}
+      {airdrop !== null && !loading && (
+        <div>
+          <AirdropCardWrapper>
+            <AirdropCard>
+              <AirdropCardBody>
+                <TableWrapperExtended className="d-flex flex-column justify-content-center align-items-center ">
+                  <div className="airdrop__logo mb-2">
+                    <img src={airdrop.logo_url} alt="Airdrop Logo" className="rounded" />
+                  </div>
+                  <AirdropHeader fontSize="2rem">{airdrop.title}</AirdropHeader>
+                  <AirdropSubHeader fontSize="1.2rem">{airdrop.description}</AirdropSubHeader>
+                </TableWrapperExtended>
 
-            <div className="d-flex justify-content-between">
-              <div>
-                <h5 className="col-sx-2 font-weight-light py-2 ">Airdrop Address :</h5>
-                <h5 className="col-sx-2 font-weight-light pb-2">Token Address :</h5>
-                <h5 className="col-sx-2 font-weight-light pb-2">Token Name :</h5>
-                <h5 className="col-sx-2 font-weight-light pb-2">Token Symbol :</h5>
-                <h5 className="col-sx-2 font-weight-light pb-2">Tokens For Airdrop:</h5>
-                {started && airdropStarted && <h5 className="col-sx-2 font-weight-light pb-2">Airdrop Start Time:</h5>}
-              </div>
-              <div>
-                <h5 className="col-sx-2 font-weight-light py-2">{AIRDROP_ADDRESS}</h5>
-                <h5 className="col-sx-2 font-weight-light pb-2">{airdrop.token_address}</h5>
-                <h5 className="col-sx-2 font-weight-light pb-2">{airdrop.token_name}</h5>
-                <h5 className="col-sx-2 font-weight-light pb-2">{airdrop.token_symbol}</h5>
-                <h5 className="col-sx-2 font-weight-light pb-2">{totalAmount}</h5>
-                {started && airdropStarted && <h5 className="col-sx-2 font-weight-light pb-2">{startDate}</h5>}
-              </div>
-            </div>
-          </Card.Body>
-        </Card>
-        <Card style={{ width: '25rem', margin: '0 auto' }} className="airdrop__card row-cols-0" text="light">
-          <Card.Body>
-            <div className="d-flex justify-content-between my-4">
-              {!started && !cancelled && (
-                <div className="">
-                  <div className=" d-flex justify-content-center ml-5 my-4">
+                <div className="d-flex justify-content-center">
+                  <IconsWrapper className="d-flex justify-content-between">
+                    <SocialIcon
+                      url={airdrop.instagram_url}
+                      network="instagram"
+                      fgColor="#fff"
+                      style={{ height: 40, width: 40 }}
+                    />
+                    <SocialIcon
+                      url={airdrop.twitter_url}
+                      network="twitter"
+                      fgColor="#fff"
+                      style={{ height: 40, width: 40 }}
+                    />
+                    <SocialIcon
+                      url={airdrop.reddit_url}
+                      network="reddit"
+                      fgColor="#fff"
+                      style={{ height: 40, width: 40 }}
+                    />
+                    <SocialIcon
+                      url={airdrop.github_url}
+                      network="github"
+                      fgColor="#fff"
+                      style={{ height: 40, width: 40 }}
+                    />
+                    <SocialIcon
+                      url={airdrop.telegram_url}
+                      network="telegram"
+                      fgColor="#fff"
+                      style={{ height: 40, width: 40 }}
+                    />
+                    <SocialIcon
+                      url={airdrop.website_url}
+                      network="dribbble"
+                      fgColor="#fff"
+                      style={{ height: 40, width: 40 }}
+                    />
+                  </IconsWrapper>
+                </div>
+
+                <TableWrapperExtended>
+                  <Table>
+                    <tbody>
+                      <tr>
+                        <td>Airdrop Address</td>
+                        <td>{AIRDROP_ADDRESS}</td>
+                      </tr>
+
+                      <tr>
+                        <td>Token Address</td>
+                        <td>{airdrop.token_name}</td>
+                      </tr>
+
+                      <tr>
+                        <td>Token Name </td>
+                        <td>{airdrop.token_name}</td>
+                      </tr>
+
+                      <tr>
+                        <td>Token Symbol</td>
+                        <td>{airdrop.token_symbol}</td>
+                      </tr>
+
+                      <tr>
+                        <td>Tokens For Airdrop</td>
+                        <td>{totalAmount}</td>
+                      </tr>
+
+                      {started && airdropStarted && (
+                        <tr>
+                          <td>Start Date</td>
+                          <td>{startDate}</td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </Table>
+                </TableWrapperExtended>
+              </AirdropCardBody>
+            </AirdropCard>
+
+            <AirdropCard>
+              <AirdropCardBody>
+                {!started && !cancelled && (
+                  <TableWrapperExtended>
                     {airdrop.owner_address !== account && (
                       <div>
-                        <h1 className=" d-flex justify-content-center ml-5 my-4">Airdrop will be starting soon!</h1>
+                        <h1 className=" d-flex justify-content-center  my-4">Airdrop will be starting soon!</h1>
                       </div>
                     )}
                     {airdrop.owner_address === account && (
-                      <div>
-                        <h1 className=" d-flex justify-content-center ml-5 my-4">
-                          Airdrop cannot be cancelled once started!
-                        </h1>
-                        <div className=" d-flex justify-content-center ml-5 my-4">
+                      <>
+                        <TableHeader>Airdrop cannot be cancelled once started!</TableHeader>
+                        <div className=" d-flex justify-content-center my-4">
                           <DateTimePicker
                             size="small"
                             color="primary"
@@ -380,91 +429,86 @@ export default function AirdropDetails({
                             }}
                           />
                         </div>
-                        <div className=" d-flex justify-content-center gap-3 ml-5 my-4">
-                          <Button scale="md" variant="secondary" onClick={handleAllowance}>
-                            Approve
-                          </Button>
-                          <Button scale="md" variant="secondary" onClick={handleStart}>
-                            Start Airdrop
-                          </Button>
+                        <div className=" d-flex justify-content-center my-4">
+                          {isArroved ? (
+                            <Button scale="md" variant="secondary" onClick={startAirdrop} className="ml-2">
+                              Start Airdrop
+                            </Button>
+                          ) : (
+                            <Button scale="md" variant="secondary" onClick={handleAllowance}>
+                              Approve
+                            </Button>
+                          )}
                         </div>
-                        <div className=" d-flex justify-content-center ml-5 my-4">
+                        <div className=" d-flex justify-content-center  my-4">
                           <Button scale="md" variant="secondary" onClick={handleWithdraw}>
                             Withdraw Airdrop
                           </Button>
                         </div>
+                      </>
+                    )}
+                  </TableWrapperExtended>
+                )}
+
+                {cancelled && (
+                  <div className=" d-flex justify-content-center ml-5 my-4">
+                    <h1>Airdrop cancelled!</h1>
+                  </div>
+                )}
+
+                {started && airdropStarted && (
+                  <div className="">
+                    {finalTime > currentTime && (
+                      <div>
+                        <div className=" d-flex justify-content-center ml-5 mt-4 mb-2">
+                          <h1>Airdrop Timer:</h1>
+                        </div>
+                        <div className=" d-flex justify-content-center ml-5 mt-2 mb-4">
+                          <h1>
+                            <CountDownTimer endtime={finalTime} currTime={currentTime} />
+                          </h1>
+                        </div>
                       </div>
                     )}
-                  </div>
-                </div>
-              )}
-
-              {cancelled && (
-                <div className=" d-flex justify-content-center ml-5 my-4">
-                  <h1>Airdrop cancelled!</h1>
-                </div>
-              )}
-
-              {started && airdropStarted && (
-                <div className="">
-                  {finalTime > currentTime && (
-                    <div>
-                      <div className=" d-flex justify-content-center ml-5 mt-4 mb-2">
-                        <h1>Airdrop Timer:</h1>
+                    {finalTime <= currentTime && (
+                      <div className=" d-flex justify-content-center  mt-4 mb-2">
+                        <h1>Airdrop Started! Claim your tokens!</h1>
                       </div>
-                      <div className=" d-flex justify-content-center ml-5 mt-2 mb-4">
-                        <h1>
-                          <CountDownTimer endtime={finalTime} currTime={currentTime} />
-                        </h1>
-                      </div>
-                    </div>
-                  )}
-                  {finalTime <= currentTime && (
-                    <div className=" d-flex justify-content-center ml-5 mt-4 mb-2">
-                      <h1>Airdrop Started! Claim your tokens!</h1>
-                    </div>
-                  )}
-                  <div className="mb-3">
-                    <h1 className=" d-flex justify-content-center ml-5">Go back to the dashboard to view others!</h1>
-                    <div className=" d-flex justify-content-center ml-5 my-4">
-                      <Link to={`/swap`}>
-                        <Button scale="md" variant="secondary">
-                          Bitgert Swap
+                    )}
+                    <div className="mb-3">
+                      <h1 className=" d-flex justify-content-center ">If you are one of the Participants</h1>
+                      <h1 className=" d-flex justify-content-center ">Claim your tokens!</h1>
+                      <div className=" d-flex justify-content-center  my-4">
+                        <Button scale="md" variant="secondary" onClick={handleClaim}>
+                          Claim
                         </Button>
-                      </Link>
-                    </div>
-                    <h1 className=" d-flex justify-content-center ml-5">If you are one of the Participants</h1>
-                    <h1 className=" d-flex justify-content-center ml-5">Claim your tokens!</h1>
-                    <div className=" d-flex justify-content-center ml-5 my-4">
-                      <Button scale="md" variant="secondary" onClick={handleClaim}>
-                        Claim
-                      </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-          </Card.Body>
-        </Card>
-      </div>
-      <div className=" px-5 pb-5">
-        <Table striped bordered hover variant="dark" className="table table-borderless">
-          <thead>
-            <tr>
-              <th>Participants</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody>
-            {addressAmount.map((token) => (
-              <tr key={token.address}>
-                <td> {token.address} </td>
-                <td> {token.amount} </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
-    </div>
+                )}
+              </AirdropCardBody>
+            </AirdropCard>
+          </AirdropCardWrapper>
+          <TableWrapperExtended>
+            <Table>
+              <thead>
+                <tr>
+                  <th>Participants</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {addressAmount.map((token) => (
+                  <tr key={token.address}>
+                    <td> {token.address} </td>
+                    <td> {token.amount} </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </TableWrapperExtended>
+        </div>
+      )}
+    </Container>
   )
 }

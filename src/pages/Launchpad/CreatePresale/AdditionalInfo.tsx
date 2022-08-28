@@ -108,7 +108,7 @@ export default function AdditionalInfo({ handleChange, data }: FormComponentProp
         />
       </div>
 
-      <div className="row">
+      {/* <div className="row">
         <div className="col-md-6 mb-3">
           {checkbox.state}
           <Checkbox
@@ -162,7 +162,7 @@ export default function AdditionalInfo({ handleChange, data }: FormComponentProp
             KYC
           </Checkbox>
         </div>
-      </div>
+      </div> */}
     </CardBody>
   )
 }

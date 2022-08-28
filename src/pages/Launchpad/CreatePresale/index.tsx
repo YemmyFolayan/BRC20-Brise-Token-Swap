@@ -213,18 +213,12 @@ export default function CreatePresale() {
     const args: Array<object | string[] | number> = [payload]
     const value: BigNumber = ethers.utils.parseEther(`${ethers.utils.formatEther(currentFee.toString())}`)
 
-    console.log(currentFee.toString())
-    console.log(value)
-    console.log(args)
-    console.log(value.toString())
-
     setAttemptingTxn(true)
     await method(...args, {
       value: value,
     })
       .then((response) => {
         setAttemptingTxn(false)
-        console.log(response)
         setTxHash(response.hash)
 
         addPresale({ ...formData, owner_address: account, sale_id: currentPresaleId.toNumber() })

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import moment from 'moment'
+import { CountDownText } from './styleds'
 
 interface FormComponentProps {
   endtime: any
@@ -26,6 +27,6 @@ const CountDownTimer = ({ endtime, currTime }: FormComponentProps) => {
     }, 1000)
   }, [endtime])
 
-  return <span>{timeLeft}</span>
+  return <CountDownText>{timeLeft}</CountDownText>
 }
 export default CountDownTimer

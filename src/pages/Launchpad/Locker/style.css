@@ -9,3 +9,9 @@
 .extend__form__container__width {
   min-width: 550px;
 }
+
+.pretty .state label:before {
+  border-color: #252a2f !important;
+}
+
+

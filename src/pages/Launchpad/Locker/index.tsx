@@ -6,6 +6,7 @@ import { DateTimePicker } from '@material-ui/pickers'
 import { TextField, withStyles } from '@material-ui/core'
 import { Checkbox, useCheckboxState } from 'pretty-checkbox-react'
 import '@djthoms/pretty-checkbox'
+import moment from 'moment'
 
 import { ethers } from 'ethers'
 
@@ -69,6 +70,7 @@ export default function Locker() {
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
   const [showApprove, setShowApprove] = useState<boolean>(false)
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
+  const [approveSuccess, setApproveSuccess] = useState<boolean>(false)
 
   const [formData, setFormData] = useState({
     chain_id: '32520',
@@ -156,8 +158,8 @@ export default function Locker() {
         owner_address ? owner_address : account,
         token_address,
         isLPToken,
-        amount,
-        await getUnixTimestamp(dateTimeContract, release_date),
+        ethers.utils.parseUnits(amount, parseInt(token_decimal)).toString(),
+        moment(release_date).format('X'),
         description,
       ]
 
@@ -213,8 +215,8 @@ export default function Locker() {
         owner_address ? owner_address : account,
         token_address,
         isLPToken,
-        amount,
-        await getUnixTimestamp(dateTimeContract, tge_date),
+        ethers.utils.parseUnits(amount, parseInt(token_decimal)).toString(),
+        moment(tge_date).format('X'),
         tge_percent,
         release_cycle,
         release_percent,
@@ -272,23 +274,28 @@ export default function Locker() {
     }
   }
 
-  const ApproveBitgertLock = async (formData) => {
+  const handleAllowance = async () => {
+    if (!account || !token_address) return
     if (!chainId || !library || !account) return
+
     const tokenContract = getTokenContract(token_address, library, account)
 
-    const payload = [LOCK_ADDRESS, amount]
+    const payload = [LOCK_ADDRESS, ethers.utils.parseUnits(amount, parseInt(token_decimal)).toString()]
 
     const method: (...args: any) => Promise<TransactionResponse> = tokenContract!.approve
     const args: Array<string | string[] | number> = payload
 
     setAttemptingTxn(true)
+    setApproveSuccess(false)
     await method(...args)
       .then((response) => {
         setAttemptingTxn(false)
         setTxHash(response.hash)
+        setApproveSuccess(true)
       })
       .catch((e) => {
         setAttemptingTxn(false)
+        setApproveSuccess(false)
         // we only care if the error is something _other_ than the user rejected the tx
         if (e?.code !== 4001) {
           console.error(e)
@@ -306,11 +313,6 @@ export default function Locker() {
     }
 
     createBitgertLock(formData)
-  }
-
-  const handleAllowance = () => {
-    if (!account || !token_address) return
-    ApproveBitgertLock(formData)
   }
 
   return (
@@ -349,10 +351,10 @@ export default function Locker() {
                     color="warning"
                     bigger
                     shape="curve"
-                    animation="jelly"
+                    animation="smooth"
                     icon={<i className="fas fa-check" />}
                   >
-                    LP token ?
+                    <span className="ml-2">LP token?</span>
                   </Checkbox>
                 </div>
 
@@ -363,10 +365,10 @@ export default function Locker() {
                     color="warning"
                     bigger
                     shape="curve"
-                    animation="jelly"
+                    animation="smooth"
                     icon={<i className="fas fa-check" />}
                   >
-                    use another owner?
+                    <span className="ml-2">use another owner?</span>
                   </Checkbox>
                 </div>
 
@@ -422,23 +424,23 @@ export default function Locker() {
                   />
                 </div>
 
-                <div className="col-md-12 mb-3">
+                <div className="col-md-12 mb-4 mt-2">
                   <Checkbox
                     checked={is_vesting}
                     onChange={handleChange('is_vesting')}
                     color="warning"
                     bigger
                     shape="curve"
-                    animation="jelly"
+                    animation="smooth"
                     icon={<i className="fas fa-check" />}
                   >
-                    use vesting?
+                    <span className="ml-2">use vesting?</span>
                   </Checkbox>
                 </div>
 
                 {!is_vesting && (
                   <div className="col-md-12 mb-3">
-                    <label htmlFor="inputTokenAddress" className="form-label mb-2 mx-1">
+                    <label htmlFor="inputTokenAddress" className="form-label mb-3 mt-2">
                       Lock until (UTC time)
                     </label>{' '}
                     <br />
@@ -534,13 +536,18 @@ export default function Locker() {
               </div>
             </CardBody>
 
-            <div className="d-flex justify-content-center gap-3 mt-3">
-              <Button className="mx-3" onClick={handleAllowance}>
-                Approve
-              </Button>
-              <Button className="mx-3" onClick={handleSubmit}>
-                Submit
-              </Button>
+            <div className="d-flex justify-content-center gap-1 mt-3">
+              {!approveSuccess && (
+                <Button onClick={handleAllowance}>
+                  Approve
+                </Button>
+              )}
+
+              {approveSuccess && (
+                <Button className=" ml-3" onClick={handleSubmit}>
+                  Submit
+                </Button>
+              )}
             </div>
           </div>
         </AppBodyExtended>

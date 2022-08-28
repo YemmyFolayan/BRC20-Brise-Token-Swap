@@ -249,10 +249,6 @@ export default function Chart() {
                     ).toFixed(4)}
                   </PriceHeading>
                 </PriceHeadingContainer>
-
-                <HeadingContainer>
-                  <DateText>{moment().format('MMM DD, YYYY, h:mm A')}</DateText>
-                </HeadingContainer>
               </>
             )}
           </div>

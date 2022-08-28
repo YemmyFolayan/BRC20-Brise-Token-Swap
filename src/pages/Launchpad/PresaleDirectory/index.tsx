@@ -60,7 +60,7 @@ export default function PresaleDirectory() {
           ))}
         </StyledCardContainer>
       </Container>
-      <div className="mt-5"> </div>
+      <div className="mt-5" />
     </>
   )
 }

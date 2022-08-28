@@ -11,7 +11,7 @@ import { useDateTimeContract } from 'hooks/useContract'
 import getUnixTimestamp from 'utils/getUnixTimestamp'
 import { getAllPresale } from './apicalls'
 
-import { FaLock, FaClock, FaArrowRight, FaArrowAltCircleRight, FaArrowCircleRight } from 'react-icons/fa'
+import { FaLock, FaClock, FaArrowRight } from 'react-icons/fa'
 import { MdLockClock } from 'react-icons/md'
 
 import './style.css'

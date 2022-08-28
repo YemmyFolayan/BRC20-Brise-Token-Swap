@@ -1,24 +1,26 @@
 /* eslint-disable */
 import React, { useState, useEffect } from 'react'
-import { Button, CardBody, Grid } from '@evofinance9/uikit'
+import { Link } from 'react-router-dom'
 import swal from 'sweetalert'
+import { Oval } from 'react-loader-spinner'
+
+import './style.css'
 
 import Container from 'components/Container'
 
-import { AppBodyExtended } from 'pages/AppBody'
-
-import './style.css'
 import getAllTokens from './apicalls'
-import { Table } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { TableWrapper, Table, LoaderWrapper } from './styleds'
 
 export default function LockDirectory() {
   const [tokenDetails, setTokenDetails] = useState<any>({})
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchLockList = () => {
+      setLoading(true)
       getAllTokens()
         .then((response) => {
+          setLoading(false)
           const tmp = {}
           const rs = response.reduce((acc, e) => {
             if (tmp[e.token_address]) {
@@ -30,6 +32,7 @@ export default function LockDirectory() {
           setTokenDetails(tmp)
         })
         .catch((err) => {
+          setLoading(false)
           console.log(err)
           swal('Oops', 'Something went wrong!', 'error')
         })
@@ -40,29 +43,50 @@ export default function LockDirectory() {
   return (
     <>
       <Container>
-        <div className="row w-100 h-100">
-          <Table striped bordered hover variant="dark" className="table table-borderless p-3">
-            <thead>
-              <tr>
-                <th>Token</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            {Object.entries(tokenDetails).map((token) => (
-              <tbody>
+        <TableWrapper>
+          {loading && (
+            <LoaderWrapper>
+              <Oval
+                height={80}
+                width={80}
+                color="#f9d849"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+                ariaLabel="oval-loading"
+                secondaryColor="#f4d85b"
+                strokeWidth={2}
+                strokeWidthSecondary={2}
+              />
+            </LoaderWrapper>
+          )}
+
+          {Object.entries(tokenDetails).length !== 0 && (
+            <Table>
+              <thead>
                 <tr>
-                  <td>
-                    {tokenDetails[token[0]][1]} <br /> <span className="text-secondary"> {tokenDetails[token[0]][2]} </span>{' '}
-                  </td>
-                  <td>{tokenDetails[token[0]][0]}</td>
-                  <td>
-                    <Link to={`/locks/${token[0]}`}>View</Link>
-                  </td>
+                  <th>Token</th>
+                  <th>Amount</th>
+                  <th>Action</th>
                 </tr>
+              </thead>
+              <tbody>
+                {Object.entries(tokenDetails).map((token) => (
+                  <tr key={tokenDetails[token[0]][1].toString()}>
+                    <td>
+                      {tokenDetails[token[0]][1]}
+                      <span className="text-secondary ml-2"> {tokenDetails[token[0]][2]} </span>{' '}
+                    </td>
+                    <td>{tokenDetails[token[0]][0]}</td>
+                    <td>
+                      <Link to={`/locks/${token[0]}`}>View</Link>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
-            ))}
-          </Table>
-        </div>
+            </Table>
+          )}
+        </TableWrapper>
       </Container>
       <div className="mt-5"> </div>
     </>
