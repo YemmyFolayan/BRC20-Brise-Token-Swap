@@ -505,6 +505,8 @@ const Swap = () => {
           <AdvancedSwapDetailsDropdown trade={trade} />
         </Col>
       </CustomContainer>
+
+      <div className='p-5 m-3'> </div>
     </Container>
   )
 }

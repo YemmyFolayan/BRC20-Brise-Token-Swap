@@ -35,14 +35,6 @@
       "logoURI": "https://evo-server.in/images/0x0e11DCE06eF2FeD6f78CEF5144F970E1184b4298.png"
     },
     {
-      "name": "Omnia Token",
-      "symbol": "OMNIA",
-      "address": "0x5d4685c2C75581C67b9D6292A065a767bC214681",
-      "chainId": 32520,
-      "decimals": 8,
-      "logoURI": "https://evo-server.in/images/0x5d4685c2C75581C67b9D6292A065a767bC214681.png"
-    },
-    {
       "name": "Young Parrot Token",
       "symbol": "YPC",
       "address": "0x11203a00a9134Db8586381C4B2fca0816476b3FD",

@@ -134,7 +134,12 @@ export default function Chart() {
         },
       },
     })
-    const candlestickSeries = firstChart.addCandlestickSeries()
+    const candlestickSeries = firstChart.addCandlestickSeries({
+      priceFormat: {
+        type: 'custom',
+        formatter: (price) => parseFloat(price).toFixed(8),
+      },
+    })
     candlestickSeries.setData(priceData)
   }, [priceData])
 
@@ -246,7 +251,7 @@ export default function Chart() {
                     ${' '}
                     {parseFloat(
                       priceGraphData?.tokenDayDatas[priceGraphData?.tokenDayDatas?.length - 1]?.priceUSD
-                    ).toFixed(4)}
+                    ).toFixed(8)}
                   </PriceHeading>
                 </PriceHeadingContainer>
               </>
