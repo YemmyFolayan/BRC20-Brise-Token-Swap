@@ -59,6 +59,10 @@ const PRICE_QUERY = gql`
     tokenDayDatas(first: $first, orderDirection: $orderDirection, where: $where) {
       priceUSD
       date
+      open
+      high
+      low
+      close
       token {
         name
         symbol
@@ -153,10 +157,10 @@ export default function Chart() {
     if (!priceGraphData) return
     const { tokenDayDatas } = priceGraphData
     const formattedData = tokenDayDatas.map((tokenDayData) => ({
-      open: tokenDayData.priceUSD,
-      high: tokenDayData.priceUSD,
-      low: tokenDayData.priceUSD,
-      close: tokenDayData.priceUSD,
+      open: tokenDayData.open,
+      high: tokenDayData.high,
+      low: tokenDayData.low,
+      close: tokenDayData.close,
       time: moment.unix(tokenDayData.date).format('YYYY-MM-DD'),
     }))
     setPriceData(formattedData)
