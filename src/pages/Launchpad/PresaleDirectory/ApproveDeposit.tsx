@@ -44,7 +44,7 @@ const ApproveDeposit = ({ token, depositAmount, depositeToken }: ApproveDepositC
     <>
       {approval === ApprovalState.APPROVED ? (
         <Button scale="md" variant="secondary" onClick={depositeToken}>
-          Deposite
+          Deposit
         </Button>
       ) : (
         <Button

@@ -42,7 +42,7 @@ export const walletlink = new WalletLinkConnector({
   url: NETWORK_URL,
   appName: 'BitgertSwap',
   appLogoUrl:
-    'https://evo-server.in/images/0x8fff93e810a2edaafc326edee51071da9d398e83.png',
+    'https://bitgertswapserver.com/api/images/0x8fff93e810a2edaafc326edee51071da9d398e83.png',
 })
 
 export const connectorsByName: { [connectorName in ConnectorNames]: any } = {
