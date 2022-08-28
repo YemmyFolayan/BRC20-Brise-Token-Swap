@@ -349,6 +349,11 @@ export default function CreatePresale() {
       return
     }
 
+    if (parseInt(router_rate) < 70) {
+      swal('Oops', 'Liquidity rate must be greater that 70!', 'warning')
+      return
+    }
+
     createPresale(formData)
   }
 
