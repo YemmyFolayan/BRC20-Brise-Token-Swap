@@ -44,6 +44,7 @@ const ASSETS_QUERY = gql`
           "0xf7dec488c42972d12ec3a216a48676f111196448"
           "0xdff3eb18ac39285331521ba2316deecb082f7371"
           "0x218961247cf30b67983cbdbe4d198c8bc1e45541"
+          "0x9892ffb5ec3eaa1ee980b8c14976a71c8455374b"
         ]
       }
     ) {
