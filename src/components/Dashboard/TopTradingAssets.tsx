@@ -36,7 +36,16 @@ const ASSETS_QUERY = gql`
     tokens(
       orderBy: tradeVolume
       orderDirection: desc
-      where: { id_not_in: ["0x0eb9036cbe0f052386f36170c6b07ef0a0e3f710", "0xc1f9bdd0603665b9ae1e4d56e58240a018596b1a"] }
+      where: {
+        id_not_in: [
+          "0x0eb9036cbe0f052386f36170c6b07ef0a0e3f710"
+          "0xc1f9bdd0603665b9ae1e4d56e58240a018596b1a"
+          "0x52f26febc4f99e2a08c5d0c8b2e9be1a8f113f3c"
+          "0xf7dec488c42972d12ec3a216a48676f111196448"
+          "0xdff3eb18ac39285331521ba2316deecb082f7371"
+          "0x218961247cf30b67983cbdbe4d198c8bc1e45541"
+        ]
+      }
     ) {
       id
       name
