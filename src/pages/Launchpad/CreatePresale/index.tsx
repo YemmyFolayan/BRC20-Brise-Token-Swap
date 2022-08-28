@@ -19,6 +19,7 @@ import Timing from './Timing'
 import addPresale from './apicalls'
 
 import { ROUTER_ADDRESS } from 'constants/index'
+import Tooltip from 'components/Tooltip'
 import { useActiveWeb3React } from 'hooks'
 import { usePresaleContract, useDateTimeContract } from 'hooks/useContract'
 import { getPresaleContract } from 'utils'
@@ -27,6 +28,7 @@ import getUnixTimestamp from 'utils/getUnixTimestamp'
 import './style.css'
 import { AppBodyExtended } from 'pages/AppBody'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
+import { FaInfoCircle } from 'react-icons/fa'
 
 export default function CreatePresale() {
   const { account, chainId, library } = useActiveWeb3React()
@@ -38,6 +40,7 @@ export default function CreatePresale() {
   // modal and loading
   const [showConfirm, setShowConfirm] = useState<boolean>(false)
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false) // clicked confirm
+  const [feeTooltip, setFeeTooltip] = useState<boolean>(false)
 
   const [state, setState] = useState({
     steps: [
@@ -361,7 +364,13 @@ export default function CreatePresale() {
     <>
       <Container>
         <AppBodyExtended>
-          <CardHeader>Create Presale</CardHeader>
+          <CardHeader className="d-flex justify-content-between">
+            <span>Create Presale</span>
+
+            <Tooltip show={feeTooltip} placement="right" text="Fee: 20000000 BRISE">
+              <FaInfoCircle onMouseEnter={() => setFeeTooltip(true)} onMouseLeave={() => setFeeTooltip(false)} />
+            </Tooltip>
+          </CardHeader>
           <CardBody>
             {txHash && (
               <TransactionConfirmationModal

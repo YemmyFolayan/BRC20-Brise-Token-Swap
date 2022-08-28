@@ -12,6 +12,8 @@ import { getTokenCreatorContract, bnMultiplyByDecimal } from 'utils'
 
 import Container from 'components/Container'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
+import { FaInfoCircle } from 'react-icons/fa'
+import Tooltip from 'components/Tooltip'
 
 import { AppBodyExtended } from 'pages/AppBody'
 
@@ -33,6 +35,7 @@ const CreateToken = () => {
   const [success, setSuccess] = useState<boolean>(false)
   const [currentFee, setCurrentFee] = useState('0')
   const [tokenAddress, setTokenAddress] = useState<string>('')
+  const [feeTooltip, setFeeTooltip] = useState<boolean>(false)
 
   const [formData, setFormData] = useState({
     token_name: '',
@@ -61,7 +64,7 @@ const CreateToken = () => {
       token_name,
       token_symbol,
       token_decimal,
-      ethers.utils.parseUnits(total_supply, parseInt(token_decimal)).toString()
+      ethers.utils.parseUnits(total_supply, parseInt(token_decimal)).toString(),
     ]
 
     const method: (...args: any) => Promise<TransactionResponse> = tokenCreator!.createToken
@@ -118,7 +121,12 @@ const CreateToken = () => {
           />
         )}
         <AppBodyExtended>
-          <CardHeader>Create BRC20 Token</CardHeader>
+          <CardHeader className="d-flex justify-content-between">
+            Create BRC20 Token
+            <Tooltip show={feeTooltip} placement="right" text="Fee: 200000000 BRISE">
+              <FaInfoCircle onMouseEnter={() => setFeeTooltip(true)} onMouseLeave={() => setFeeTooltip(false)} />
+            </Tooltip>
+          </CardHeader>
           <CardBody>
             {success ? (
               <div className="row">

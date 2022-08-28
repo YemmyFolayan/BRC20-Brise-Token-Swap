@@ -64,6 +64,7 @@ export default function Airdrop() {
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
   const [allowcationTooltip, setAllowcationTooltip] = useState<boolean>(false)
   const [allowcationAmountTooltip, setAllowcationAmountTooltip] = useState<boolean>(false)
+  const [feeTooltip, setFeeTooltip] = useState<boolean>(false)
 
   const [formData, setFormData] = useState({
     chain_id: '32520',
@@ -153,8 +154,6 @@ export default function Airdrop() {
       0,
       0,
     ]
-    console.log(airdrop)
-    console.log(payload)
     const method: (...args: any) => Promise<TransactionResponse> = airdrop!.createAirdrop
     const args: Array<object | string[] | string | boolean | number> = payload
     const value: BigNumber = ethers.utils.parseEther(`${ethers.utils.formatEther(staticFee.toString())}`)
@@ -165,11 +164,8 @@ export default function Airdrop() {
     })
       .then(async (response: any) => {
         const txReceipt = await response.wait()
-        console.log(txReceipt)
         const airdropId = txReceipt.events[0].args.airdropID.toNumber()
-        console.log(airdropId)
         setAttemptingTxn(false)
-        console.log(response)
         addAirdrop({
           ...formData,
           addresses_to: addresses_to.split(','),
@@ -221,16 +217,7 @@ export default function Airdrop() {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    if (
-      !token_address ||
-      !token_name ||
-      !token_decimal ||
-      !token_symbol ||
-      !title ||
-      !addresses_to ||
-      !amounts_to ||
-      !description
-    ) {
+    if (!token_address || !token_name || !token_decimal || !token_symbol || !title || !addresses_to || !amounts_to) {
       swal('Are you sure?', 'There are incomplete fields in your submission!', 'warning')
       return
     }
@@ -252,7 +239,12 @@ export default function Airdrop() {
               pendingText={''}
             />
           )}
-          <CardHeader>Create Airdrop</CardHeader>
+          <CardHeader className="d-flex justify-content-between">
+            Create Airdrop
+            <Tooltip show={feeTooltip} placement="right" text="Fee: 2000000 BRISE">
+              <FaInfoCircle onMouseEnter={() => setFeeTooltip(true)} onMouseLeave={() => setFeeTooltip(false)} />
+            </Tooltip>
+          </CardHeader>
           <CardBody>
             <div className="row">
               <div className="col-md-6 mb-3">
