@@ -43,6 +43,7 @@ import {
   CustomTextColor,
   InfoTable,
   LoaderWrapper,
+  PresaleSubHeaderExtended
 } from './styleds'
 
 interface FormComponentProps {
@@ -357,9 +358,9 @@ export default function PoolDetails({
                 </div>
               </div>
 
-              <div className="my-3 text-center">
+              <div className="my-3 d-flex flex-column justify-content-center align-items-center">
                 <PresaleHeader fontSize="2rem">{presale.token_name}</PresaleHeader>
-                <PresaleSubHeader fontSize="1.2rem">{presale.project_dec}</PresaleSubHeader>
+                <PresaleSubHeaderExtended fontSize="1.2rem">{presale.project_dec}</PresaleSubHeaderExtended>
               </div>
 
               <div>

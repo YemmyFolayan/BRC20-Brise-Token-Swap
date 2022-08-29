@@ -48,6 +48,15 @@ export const PresaleSubHeader = styled.p<{ fontSize: string }>`
   font-weight: 100;
 `
 
+export const PresaleSubHeaderExtended = styled.p<{ fontSize: string }>`
+  font-size: ${(params) => params.fontSize};
+  line-height: 1.5;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 100;
+  max-width: 500px;
+  text-align: center;
+`
+
 export const PresaleInfoContainer = styled.div`
   max-width: 700px;
 `
