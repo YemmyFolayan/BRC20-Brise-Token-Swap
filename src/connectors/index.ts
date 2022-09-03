@@ -40,9 +40,9 @@ export const walletconnect = new WalletConnectConnector({
 // mainnet only
 export const walletlink = new WalletLinkConnector({
   url: NETWORK_URL,
-  appName: 'BitgertSwap',
+  appName: 'Swiftchain',
   appLogoUrl:
-    'https://bitgertswapserver.com/api/images/0x8fff93e810a2edaafc326edee51071da9d398e83.png',
+    'https://drive.google.com/uc?export=view&id=10W4nYZIH-Wp6aW7j4b1V9cKN4e8bPkAG',
 })
 
 export const connectorsByName: { [connectorName in ConnectorNames]: any } = {

@@ -27,7 +27,7 @@ export default function Footer() {
 
               <div className="col-md-2">
                 <h6 className="text-uppercase font-weight-bold">
-                  <a href="https://t.me/+jk-Wq1rDZ98xZmFh" className="text-white">
+                  <a href="https://t.me/savvyfolayanyemi" className="text-white">
                     Support
                   </a>
                 </h6>
@@ -59,10 +59,10 @@ export default function Footer() {
           </section>
 
           <section className="text-center mb-5">
-          <a href="https://tttttt.me/evofinances" className="text-white mx-3">
+          <a href="https://t.me/savvyfolayanyemi" className="text-white mx-3">
               <i className="fab fa-telegram" />
             </a>
-            <a href="https://twitter.com/Evo_finances" className="text-white mx-3">
+            <a href="https://twitter.com/softfolayanyemi" className="text-white mx-3">
               <i className="fab fa-twitter" />
             </a>
           </section>
@@ -70,8 +70,8 @@ export default function Footer() {
 
         <div className="text-center p-3" style={{ backgroundColor: ' rgba(0, 0, 0, 0.2)' }}>
           © {new Date().getFullYear()} Copyright:
-          <a className="text-white mx-1" href="https://bitgert.com/">
-            Bitgert
+          <a className="text-white mx-1" href="https://michaelfolayan.netlify.com/">
+            Swift Chain
           </a>
         </div>
       </footer>

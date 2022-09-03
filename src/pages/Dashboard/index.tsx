@@ -80,9 +80,8 @@ const IconGridHeader = styled.span`
 const IconGridSub = styled.span`
   font-size: 0.9rem;
   font-weight: 600;
-  color: #f9d849;
+  color: #000FFF;
 `
-
 const FACTORY_QUERY = gql`
   {
     uniswapFactory(id: "0x456405E3d355ad27010Fd87e3c7cC8a2DcA372fD") {

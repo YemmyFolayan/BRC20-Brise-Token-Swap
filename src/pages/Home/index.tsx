@@ -23,15 +23,15 @@ SwiperCore.use([Pagination, Autoplay])
 const banners: any[] = [
   {
     id: 0,
-    label: 'Centcex Banner',
-    hrefURL: `https://centcex.finance/`,
-    imageURL: `${SWAP_API}/images/banner-0.jpg`,
+    label: 'Swift Chain Banner',
+    hrefURL: `https://swiftchain.netlify.app/`,
+    imageURL: `https://drive.google.com/uc?export=view&id=1puiIU7zWZ2_xRPSjRicgyavmr0O8Atcp`,
   },
   {
     id: 1,
-    label: 'Evo Banner',
-    hrefURL: `https://tttttt.me/evofinances`,
-    imageURL: `${SWAP_API}/images/banner-1.jpg`,
+    label: 'Block Chain Banner',
+    hrefURL: `https://swiftchain.netlify.app/`,
+    imageURL: `https://drive.google.com/uc?export=view&id=1puiIU7zWZ2_xRPSjRicgyavmr0O8Atcp`,
   },
 ]
 

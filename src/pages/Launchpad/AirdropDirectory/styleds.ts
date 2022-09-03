@@ -53,7 +53,7 @@ export const LoaderWrapper = styled.div`
 `
 
 export const TableHeader = styled.h3`
-  color: #f9d849;
+  color: #000FFF;
   padding: 1rem;
   font-family: 'Poppins', sans-serif !important;
   font-size: 1.2rem;

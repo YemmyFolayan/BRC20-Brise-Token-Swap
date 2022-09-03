@@ -387,9 +387,9 @@ export default function CreatePresale() {
               activeStep={currentStep}
               completeTitleColor="#fff"
               activeTitleColor="#fff"
-              completeColor="#F9D849"
-              activeColor="#F9D849"
-              completeBarColor="#F9D849"
+              completeColor="#000FFF"
+              activeColor="#000FFF"
+              completeBarColor="#000FFF"
             />
 
             <div className=" text-white mb-5  ">

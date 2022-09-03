@@ -62,7 +62,7 @@ export default function TokenDetails({
             <Oval
               height={80}
               width={80}
-              color="#f9d849"
+              color="#000FFF"
               wrapperStyle={{}}
               wrapperClass=""
               visible={true}
@@ -116,7 +116,7 @@ export default function TokenDetails({
             <Oval
               height={80}
               width={80}
-              color="#f9d849"
+              color="#000FFF"
               wrapperStyle={{}}
               wrapperClass=""
               visible={true}

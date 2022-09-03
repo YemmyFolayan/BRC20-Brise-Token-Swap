@@ -73,7 +73,7 @@ export const PresaleInfoSubHeader = styled.div`
   line-height: 1.5;
   font-family: 'Poppins', sans-serif;
   font-weight: 100;
-  color: #f9d849;
+  color: #000FFF;
 `
 
 export const CustomTextColor = styled.span`
